@@ -11,7 +11,7 @@ build:
 	@docker build -t ${DOCKER_IMAGE} .
 
 composer:
-	@${DOCKER_CMD} ${CMD}
+	@${DOCKER_CMD} composer ${CMD}
 
 composer-install:
 	@${DOCKER_CMD} composer install
