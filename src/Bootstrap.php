@@ -2,6 +2,7 @@
 namespace SqlDocumentor;
 use PHPSQLParser\PHPSQLParser;
 use Pimple\Container;
+use SqlDocumentor\Services\CreateTableParser;
 
 /**
  * Class Bootstrap
@@ -19,6 +20,12 @@ class Bootstrap
     {
         $this->container = new Container();
         $this->container['config'] = new Config();
+        $this->container['sql-parser'] = function($c) {
+            return new PHPSQLParser();
+        };
+        $this->container['create-table-parser'] = function($c) {
+            return new CreateTableParser($c['sql-parser']);
+        };
         return $this;
     }
 
@@ -58,14 +65,16 @@ class Bootstrap
     {
         /** @var \PDO $dbh */
         $dbh = $this->container['dbh'];
-        $stmt = $dbh->query('SHOW CREATE TABLE '.$tablename);
+        $stmt = $dbh->query(sprintf('SHOW CREATE TABLE `%s`', $tablename));
         return $stmt->fetchColumn(1);
     }
 
     public function parse($create)
     {
-        $parser = new Parser();
-        $table = $parser->parse($create);
+        $table = $this->container['create-table-parser']->parse($create);
+
+//        $parser = new Parser();
+//        $table = $parser->parse($create);
         $generator = new MarkdownGenerator();
         $document = $generator->generate($table);
         $document->export();
@@ -81,7 +90,6 @@ class Bootstrap
 
         foreach($this->listTables() as $tableName) {
             $this->parse($this->getCreateTable($tableName));
-//            break;
         }
 
         echo "done\n";
