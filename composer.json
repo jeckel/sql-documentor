@@ -11,6 +11,12 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "greenlion/php-sql-parser": "^4.1"
+        "greenlion/php-sql-parser": "^4.1",
+        "pimple/pimple": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "SqlDocumentor\\": "src/"
+        }
     }
 }
