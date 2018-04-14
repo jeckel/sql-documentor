@@ -1,0 +1,16 @@
+{
+    "name": "jeckel/sql-documentor",
+    "description": "Build Markdown documentation of a MySQL database",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julien MERCIER",
+            "email": "devci@j3ck3l.me"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "greenlion/php-sql-parser": "^4.1"
+    }
+}
