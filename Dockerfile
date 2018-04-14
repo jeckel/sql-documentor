@@ -13,4 +13,8 @@ RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/863c57de1807
 RUN mkdir -p /tmp/composer && chmod 777 /tmp/composer
 ENV COMPOSER_CACHE_DIR=/tmp/composer
 
+RUN docker-php-ext-install pdo_mysql
+
 WORKDIR /project
+
+CMD php generate.php
