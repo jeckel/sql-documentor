@@ -49,8 +49,4 @@ columns:
     comment: "Clé \"étrangère\" vers l'`id` parent sur la même table"
 ```
 
-# Evolutions
-
-- use `yaml` to include additionnal documentation in pages
-
 
