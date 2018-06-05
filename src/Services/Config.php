@@ -1,5 +1,5 @@
 <?php
-namespace SqlDocumentor;
+namespace SqlDocumentor\Services;
 
 /**
  * Class Config
@@ -11,6 +11,15 @@ class Config
      * @var array
      */
     protected $config = [];
+
+    /**
+     * Config constructor.
+     * @param array $config
+     */
+    public function __construct(array $config = [])
+    {
+        $this->config = $config;
+    }
 
     /**
      * @param string $param

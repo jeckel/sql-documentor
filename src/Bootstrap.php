@@ -4,6 +4,7 @@ namespace SqlDocumentor;
 use PHPSQLParser\PHPSQLParser;
 use Pimple\Container;
 use SqlDocumentor\Markdown\Markdown;
+use SqlDocumentor\Services\Config;
 use SqlDocumentor\Services\CreateTableParser;
 use SqlDocumentor\Services\YamlParser;
 use SqlDocumentor\Table\Table;
@@ -18,21 +19,17 @@ class Bootstrap
     protected $container;
 
     /**
-     * @return $this
+     * Bootstrap constructor.
+     * @param array $bootstrap
      */
-    public function initContainer()
+    public function __construct(array $bootstrap)
     {
         $this->container = new Container();
-        $this->container['config'] = new Config();
-        $this->container['sql-parser'] = function() { return new PHPSQLParser(); };
-        $this->container['markdown-helper'] = function() { return new Markdown(); };
-        $this->container['yaml-parser'] = function($c) {
-            return new YamlParser($c['config']->get('YML_DIRECTORY'));
-        };
-        $this->container['create-table-parser'] = function($c) {
-            return new CreateTableParser($c['sql-parser']);
-        };
-        return $this;
+        $this->container['config'] = new Config($bootstrap['config']);
+
+        foreach($bootstrap['services'] as $serviceName=>$builder) {
+            $this->container[$serviceName] = $builder;
+        }
     }
 
     /**
@@ -91,8 +88,8 @@ class Bootstrap
      * @throws \Exception
      */
     public function __invoke() {
-        $this->initContainer()
-            ->connectToDatabase();
+        //$this->initContainer()
+        $this->connectToDatabase();
 
         $tables = [];
 

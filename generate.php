@@ -8,4 +8,4 @@
 
 include 'vendor/autoload.php';
 
-(new \SqlDocumentor\Bootstrap())();
+(new \SqlDocumentor\Bootstrap(include __DIR__ . '/src/config/config.php'))();
