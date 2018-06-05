@@ -15,9 +15,7 @@ ENV COMPOSER_CACHE_DIR=/tmp/composer
 
 RUN docker-php-ext-install pdo_mysql
 
-COPY . /sql-documentor
+COPY . /project
+WORKDIR /project
 
-WORKDIR /sql-documentor
-
-RUN composer install
 CMD php generate.php
