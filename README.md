@@ -1,11 +1,33 @@
+# WORK IN PROGRESS #
+
+This project is in Work In Progress status and is not stable yet. Use it with caution.
+
 # sql-documentor
 MySQL database documentation generator
 
+The generated source can be use as input to other documentation tools like [daux.io](https://daux.io).
+
+# Usage
+
+```bash
+$> docker run --rm \
+    --link somemysql
+    -v $(pwd):/docs
+    -e MYSQL_HOST=somemysql \
+    -e MYSQL_USER=root \
+    -e MYSQL_PASSWORD=root \
+    -e MYSQL_DATABASE=somedb
+    -e TARGET_DIRECTORY=/docs
+    jeckel/sql-documentor
+```
 
 # Env variables
 
-MYSQL_HOST
-MYSQL_DATABASE
-MYSQL_USER
-MYSQL_PASSWORD
-TARGET_DIRECTORY
+- `MYSQL_HOST`: Mysql server hostname to connect to
+- `MYSQL_USER`, `MYSQL_PASSWORD`: Mysql user and password to connect with
+- `MYSQL_DATABASE`: Mysql database to extract documentation
+- `TARGET_DIRECTORY`: Folder where documentation should be generated
+
+# Evolutions
+
+- use `yaml` to include additionnal documentation in pages

@@ -10,9 +10,6 @@ COMPOSER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} --entrypoint com
 build: Dockerfile
 	@docker build -t ${DOCKER_IMAGE} .
 
-push:
-	@docker push ${DOCKER_IMAGE}
-
 composer:
 	@${COMPOSER_CMD} ${CMD}
 composer-install:
