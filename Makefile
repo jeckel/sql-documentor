@@ -3,15 +3,15 @@
 UID=$(shell id -u)
 GID=$(shell id -g)
 
-DOCKER_IMAGE="sql-documentor"
+DOCKER_IMAGE=sql-documentor
 DOCKER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} $(DOCKER_IMAGE)
-COMPOSER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
+COMPOSER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
 
 build:
 	@docker build -t ${DOCKER_IMAGE} .
 
 composer:
-	@${COMPOSER_CMD} ${CMD}
+	${COMPOSER_CMD} ${CMD}
 
 composer-install:
 	@${COMPOSER_CMD} install

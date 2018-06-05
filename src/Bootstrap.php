@@ -2,8 +2,10 @@
 namespace SqlDocumentor;
 
 use Pimple\Container;
-use SqlDocumentor\Services\Config;
+//use SqlDocumentor\Services\Config;
 use SqlDocumentor\Table\Table;
+use Zend\Config\Config;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class Bootstrap
@@ -11,22 +13,38 @@ use SqlDocumentor\Table\Table;
  */
 class Bootstrap
 {
-    /** @var Container */
-    protected $container;
+    /** @var ServiceManager */
+    protected $serviceManager;
+
+    /** @var Config */
+    protected $config;
 
     /**
      * Bootstrap constructor.
-     * @param array $bootstrap
+     * @param array $config
      */
-    public function __construct(array $bootstrap)
+    public function __construct(array $config)
     {
-        $this->container = new Container();
-        $this->container['config'] = new Config($bootstrap['config']);
-
-        foreach($bootstrap['services'] as $serviceName=>$builder) {
-            $this->container[$serviceName] = $builder;
-        }
+        $this->config = new Config($config);
+        $this->serviceManager = new ServiceManager($this->config->get('service_manager'));
     }
+
+//    /** @var Container */
+//    protected $container;
+//
+//    /**
+//     * Bootstrap constructor.
+//     * @param array $bootstrap
+//     */
+//    public function __construct(array $bootstrap)
+//    {
+//        $this->container = new Container();
+//        $this->container['config'] = new Config($bootstrap['config']);
+//
+//        foreach($bootstrap['services'] as $serviceName=>$builder) {
+//            $this->container[$serviceName] = $builder;
+//        }
+//    }
 
     /**
      * @return $this

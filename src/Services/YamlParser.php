@@ -12,10 +12,24 @@ class YamlParser
 {
     protected $ymlDir;
 
-    public function __construct($dir)
+    /**
+     * @return mixed
+     */
+    public function getYmlDir()
     {
-        $this->ymlDir = $dir;
+        return $this->ymlDir;
     }
+
+    /**
+     * @param mixed $ymlDir
+     * @return YamlParser
+     */
+    public function setYmlDir($ymlDir)
+    {
+        $this->ymlDir = $ymlDir;
+        return $this;
+    }
+
 
     public function parse(Table $table)
     {

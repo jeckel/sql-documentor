@@ -20,12 +20,21 @@ class CreateTableParser
     protected $sqlParser;
 
     /**
-     * CreateTableParser constructor.
-     * @param PHPSQLParser $sqlParser
+     * @return PHPSQLParser
      */
-    public function __construct(PHPSQLParser $sqlParser)
+    public function getSqlParser(): PHPSQLParser
+    {
+        return $this->sqlParser;
+    }
+
+    /**
+     * @param PHPSQLParser $sqlParser
+     * @return CreateTableParser
+     */
+    public function setSqlParser(PHPSQLParser $sqlParser): CreateTableParser
     {
         $this->sqlParser = $sqlParser;
+        return $this;
     }
 
     /**
