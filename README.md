@@ -31,7 +31,7 @@ $> docker run --rm \
 - `YML_DIRECTORY`: Folder where yaml file should be found
 
 
-# Sample YAML
+# Using YAML
 
 You can add additional information using a YAML file. Each file should have the name of the table with the '.yml' extension.
 
@@ -39,6 +39,8 @@ Example:
 - table name: `user_rights`
 - yaml file: `user_rights.yml`
 - output file: `user_rights.md`
+
+## Sample
 
 ```yaml
 table:

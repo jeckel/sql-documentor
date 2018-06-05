@@ -20,8 +20,9 @@ class YamlParser
     public function parse(Table $table)
     {
         $filePath = sprintf('%s/%s.yml', $this->ymlDir, $table->getName());
-        if (! is_file($filePath)) {
-            printf('No YML file for table %s\n', $table->getName());
+        if (! is_readable($filePath)) {
+            printf('No readable YML file for table %s\n', $table->getName());
+            return $table;
         }
         $yaml = yaml_parse_file($filePath);
 

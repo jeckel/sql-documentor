@@ -1,6 +1,6 @@
 # Table **<?=$table->getName()?>**
 
-[toc]
+[TOC]
 <?php if (! empty($table->getDescription())) { ?>
 ## Description
 <?= $table->getDescription() ?>

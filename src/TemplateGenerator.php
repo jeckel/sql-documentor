@@ -28,4 +28,18 @@ class TemplateGenerator
         );
         return $this;
     }
+
+    public function generateTpl(string $template, string $outputName, array $options = []): self
+    {
+        extract($options);
+        ob_start();
+        include $template;
+        $content = ob_get_clean();
+
+        file_put_contents(
+            sprintf('%s/%s', $this->outputDir, $outputName),
+            $content
+        );
+        return $this;
+    }
 }

@@ -6,6 +6,7 @@ use Pimple\Container;
 use SqlDocumentor\Markdown\Markdown;
 use SqlDocumentor\Services\CreateTableParser;
 use SqlDocumentor\Services\YamlParser;
+use SqlDocumentor\Table\Table;
 
 /**
  * Class Bootstrap
@@ -74,7 +75,7 @@ class Bootstrap
         return $stmt->fetchColumn(1);
     }
 
-    public function parse($create)
+    public function parse(string $create): Table
     {
         /** @var Config $config */
         $config = $this->container['config'];
@@ -83,6 +84,7 @@ class Bootstrap
         $table = $this->container['yaml-parser']->parse($table);
         $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
         $generator->generate($table, __DIR__.'/Template/table.md.php');
+        return $table;
     }
 
     /**
@@ -92,9 +94,17 @@ class Bootstrap
         $this->initContainer()
             ->connectToDatabase();
 
+        $tables = [];
+
         foreach($this->listTables() as $tableName) {
-            $this->parse($this->getCreateTable($tableName));
+            $table = $this->parse($this->getCreateTable($tableName));
+            $tables[$table->getName()] = $table;
         }
+
+        /** @var Config $config */
+        $config = $this->container['config'];
+        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
+        $generator->generateTpl(__DIR__.'/Template/index.md.php', 'index.md', ['tables' => $tables]);
 
         echo "done\n";
     }
