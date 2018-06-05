@@ -38,7 +38,7 @@ class CreateTableParser
         $parsed = $this->sqlParser->parse($sql);
 
         $this->logger && $this->logger->debug(print_r($parsed, true));
-        print_r($parsed);
+        //print_r($parsed);
 
         $table = new Table();
         $table->setCreateQuery($sql)
@@ -51,27 +51,43 @@ class CreateTableParser
                 continue;
             }
 
-            $type = sprintf(
-                "%s(%d)",
-                $createDef['sub_tree'][1]['sub_tree'][0]['base_expr'],
-                $createDef['sub_tree'][1]['sub_tree'][0]['length']
-            );
-
-            $column = new Column();
-            $column->setName($createDef['sub_tree'][0]['base_expr'])
-                ->setType($type)
-                ->setNullable($createDef['sub_tree'][1]['nullable'] == 1)
-                ->setAutoIncrement($createDef['sub_tree'][1]['auto_inc'] == 1);
-
-//            if ($createDef['sub_tree'][1]['unique'] == 1) {
-//                $attributes[] = $this->output->getInlineCode('Unique');
-//            }
-//            if ($createDef['sub_tree'][1]['primary'] == 1) {
-//                $attributes[] = $this->output->getInlineCode('Primary');
-//            }
-            $table->addColumn($column);
+            switch($createDef['expr_type']) {
+                case 'column-def':
+                    $this->parseColumn($table, $createDef);
+                    break;
+                default:
+                    printf("Unknown type: %s \n", $createDef['expr_type']);
+            }
         }
 
         return $table;
+    }
+
+
+    protected function parseColumn(Table $table, array $createDef)
+    {
+        $type = sprintf(
+            "%s(%d)",
+            $createDef['sub_tree'][1]['sub_tree'][0]['base_expr'],
+            $createDef['sub_tree'][1]['sub_tree'][0]['length']
+        );
+
+        //var_dump($createDef['sub_tree']);
+
+        $column = new Column();
+        $column->setName($createDef['sub_tree'][0]['no_quotes']['parts'][0])
+            ->setType($type)
+            ->setNullable($createDef['sub_tree'][1]['nullable'] == 1)
+            ->setAutoIncrement($createDef['sub_tree'][1]['auto_inc'] == 1);
+
+        if ($createDef['sub_tree'][1]['unique'] == 1) {
+            printf('Unique\n');
+            //$attributes[] = $this->output->getInlineCode('Unique');
+        }
+        if ($createDef['sub_tree'][1]['primary'] == 1) {
+            printf('Primary\n');
+            //$attributes[] = $this->output->getInlineCode('Primary');
+        }
+        $table->addColumn($column);
     }
 }

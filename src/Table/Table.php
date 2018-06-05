@@ -9,10 +9,13 @@ namespace SqlDocumentor\Table;
 class Table
 {
     /** @var string */
-    protected $name;
+    protected $name = '';
 
     /** @var string */
-    protected $createQuery;
+    protected $description = '';
+
+    /** @var string */
+    protected $createQuery = '';
 
     /** @var array  */
     protected $columns = [];
@@ -32,6 +35,24 @@ class Table
     public function setName(string $name): Table
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Table
+     */
+    public function setDescription(string $description): Table
+    {
+        $this->description = $description;
         return $this;
     }
 
@@ -70,12 +91,17 @@ class Table
      * @return Column
      * @throws \Exception
      */
-    public function getColumn($name): Column
+    public function getColumn(string $name): Column
     {
         if (! isset($this->columns[$name])) {
             throw new \Exception("Column $name not defined");
         }
         return $this->columns[$name];
+    }
+
+    public function hasColumn(string $name): bool
+    {
+        return isset($this->columns[$name]);
     }
 
     /**

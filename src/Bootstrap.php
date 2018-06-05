@@ -5,6 +5,7 @@ use PHPSQLParser\PHPSQLParser;
 use Pimple\Container;
 use SqlDocumentor\Markdown\Markdown;
 use SqlDocumentor\Services\CreateTableParser;
+use SqlDocumentor\Services\YamlParser;
 
 /**
  * Class Bootstrap
@@ -24,6 +25,9 @@ class Bootstrap
         $this->container['config'] = new Config();
         $this->container['sql-parser'] = function() { return new PHPSQLParser(); };
         $this->container['markdown-helper'] = function() { return new Markdown(); };
+        $this->container['yaml-parser'] = function($c) {
+            return new YamlParser($c['config']->get('YML_DIRECTORY'));
+        };
         $this->container['create-table-parser'] = function($c) {
             return new CreateTableParser($c['sql-parser']);
         };
@@ -76,11 +80,14 @@ class Bootstrap
         $config = $this->container['config'];
 
         $table = $this->container['create-table-parser']->parse($create);
-        $generator = new MarkdownGenerator($config->get('TARGET_DIRECTORY'));
+        $table = $this->container['yaml-parser']->parse($table);
+        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
+        $generator->generate($table, __DIR__.'/Template/table.md.php');
+/*        $generator = new MarkdownGenerator($config->get('TARGET_DIRECTORY'));
         $document = $generator->generate($table);
         $document->export();
         $this->log($document->getOutput());
-    }
+*/    }
 
     /**
      * @throws \Exception
@@ -91,6 +98,7 @@ class Bootstrap
 
         foreach($this->listTables() as $tableName) {
             $this->parse($this->getCreateTable($tableName));
+            break;
         }
 
         echo "done\n";
