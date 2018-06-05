@@ -1,7 +1,9 @@
 <?php
 namespace SqlDocumentor;
+
 use PHPSQLParser\PHPSQLParser;
 use Pimple\Container;
+use SqlDocumentor\Markdown\Markdown;
 use SqlDocumentor\Services\CreateTableParser;
 
 /**
@@ -20,9 +22,8 @@ class Bootstrap
     {
         $this->container = new Container();
         $this->container['config'] = new Config();
-        $this->container['sql-parser'] = function($c) {
-            return new PHPSQLParser();
-        };
+        $this->container['sql-parser'] = function() { return new PHPSQLParser(); };
+        $this->container['markdown-helper'] = function() { return new Markdown(); };
         $this->container['create-table-parser'] = function($c) {
             return new CreateTableParser($c['sql-parser']);
         };
@@ -71,11 +72,11 @@ class Bootstrap
 
     public function parse($create)
     {
-        $table = $this->container['create-table-parser']->parse($create);
+        /** @var Config $config */
+        $config = $this->container['config'];
 
-//        $parser = new Parser();
-//        $table = $parser->parse($create);
-        $generator = new MarkdownGenerator();
+        $table = $this->container['create-table-parser']->parse($create);
+        $generator = new MarkdownGenerator($config->get('TARGET_DIRECTORY'));
         $document = $generator->generate($table);
         $document->export();
         $this->log($document->getOutput());

@@ -15,12 +15,15 @@ class MarkdownGenerator
     /** @var Markdown */
     protected $markdown;
 
+    protected $outputDir;
+
     /**
      * MarkdownGenerator constructor.
      */
-    public function __construct()
+    public function __construct($outputDir)
     {
         $this->markdown = new Markdown();
+        $this->outputDir = $outputDir;
     }
 
     /**
@@ -29,7 +32,7 @@ class MarkdownGenerator
      */
     public function generate(Table $table): Document
     {
-        $document = new Document($table->getName(), realpath(__DIR__.'/../doc'));
+        $document = new Document($table->getName(), $this->outputDir);
         $document->addTitle(sprintf('Table %s', $this->markdown->getInlineCode($table->getName())))
             ->addTitle('Columns', 2)
             ->addContent($this->markdown->getTableHeaders(['Column', 'Type', 'Attributes', 'Comments']));
