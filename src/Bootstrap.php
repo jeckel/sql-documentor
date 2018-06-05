@@ -1,12 +1,8 @@
 <?php
 namespace SqlDocumentor;
 
-use PHPSQLParser\PHPSQLParser;
 use Pimple\Container;
-use SqlDocumentor\Markdown\Markdown;
 use SqlDocumentor\Services\Config;
-use SqlDocumentor\Services\CreateTableParser;
-use SqlDocumentor\Services\YamlParser;
 use SqlDocumentor\Table\Table;
 
 /**
@@ -53,6 +49,9 @@ class Bootstrap
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function listTables()
     {
         /** @var \PDO $dbh */
@@ -64,6 +63,10 @@ class Bootstrap
         return $tables;
     }
 
+    /**
+     * @param $tablename
+     * @return mixed
+     */
     public function getCreateTable($tablename)
     {
         /** @var \PDO $dbh */
@@ -72,6 +75,11 @@ class Bootstrap
         return $stmt->fetchColumn(1);
     }
 
+    /**
+     * @param string $create
+     * @return Table
+     * @throws \Exception
+     */
     public function parse(string $create): Table
     {
         /** @var Config $config */
@@ -87,8 +95,8 @@ class Bootstrap
     /**
      * @throws \Exception
      */
-    public function __invoke() {
-        //$this->initContainer()
+    public function __invoke()
+    {
         $this->connectToDatabase();
 
         $tables = [];
@@ -106,6 +114,10 @@ class Bootstrap
         echo "done\n";
     }
 
+    /**
+     * @param string $message
+     * @return $this
+     */
     public function log(string $message)
     {
         printf($message . "\n");
