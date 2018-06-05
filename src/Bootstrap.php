@@ -83,11 +83,7 @@ class Bootstrap
         $table = $this->container['yaml-parser']->parse($table);
         $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
         $generator->generate($table, __DIR__.'/Template/table.md.php');
-/*        $generator = new MarkdownGenerator($config->get('TARGET_DIRECTORY'));
-        $document = $generator->generate($table);
-        $document->export();
-        $this->log($document->getOutput());
-*/    }
+    }
 
     /**
      * @throws \Exception
@@ -98,7 +94,6 @@ class Bootstrap
 
         foreach($this->listTables() as $tableName) {
             $this->parse($this->getCreateTable($tableName));
-            break;
         }
 
         echo "done\n";
