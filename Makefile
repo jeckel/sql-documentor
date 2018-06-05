@@ -3,26 +3,27 @@
 UID=$(shell id -u)
 GID=$(shell id -g)
 
-DOCKER_IMAGE="jeckel/sql-documentor:latest"
+DOCKER_IMAGE="sql-documentor"
 DOCKER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} $(DOCKER_IMAGE)
 COMPOSER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
 
-build: Dockerfile
+build:
 	@docker build -t ${DOCKER_IMAGE} .
 
 composer:
 	@${COMPOSER_CMD} ${CMD}
+
 composer-install:
 	@${COMPOSER_CMD} install
 
 composer-update:
 	@${COMPOSER_CMD} update
 
+#run: clear
 run:
 	docker-compose run --rm php
-	#@${DOCKER_CMD}
 
-up: build
+up:
 	docker-compose up -d mysql
 	echo "Wait mariadb init"
 	sleep 10
@@ -31,6 +32,8 @@ up: build
 down:
 	docker-compose down -v
 
+clear:
+	@rm -f docs/*.md
 
 #Options:
 #  -c, --configuration=CONFIGURATION  Configuration file

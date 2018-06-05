@@ -13,11 +13,12 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./:/project
+      - ./:/sql-documentor
     user: 1000:1000
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
-      - TARGET_DIRECTORY=/project/docs
+      - TARGET_DIRECTORY=/sql-documentor/docs
+      - YML_DIRECTORY=/sql-documentor/docs

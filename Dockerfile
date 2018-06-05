@@ -9,11 +9,24 @@ RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/863c57de1807
     mv composer.phar /usr/local/bin/composer && \
     composer self-update
 
+#RUN apk --update upgrade \
+#    && apk add autoconf gcc g++ yaml-dev re2c make
+
+RUN apk add --no-cache --virtual .build-deps \
+    g++ make autoconf yaml-dev
+
 # Define composer cache directory
 RUN mkdir -p /tmp/composer && chmod 777 /tmp/composer
 ENV COMPOSER_CACHE_DIR=/tmp/composer
 
 RUN docker-php-ext-install pdo_mysql
+
+#RUN pecl install yaml \
+#    && docker-php-ext-enable yaml
+
+RUN pecl channel-update pecl.php.net
+RUN pecl install yaml-2.0.0 && docker-php-ext-enable yaml
+
 
 COPY . /sql-documentor
 
