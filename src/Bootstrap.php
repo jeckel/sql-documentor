@@ -68,31 +68,31 @@ class Bootstrap
 //        return $this;
 //    }
 
-    /**
-     * @return array
-     */
-    public function listTables()
-    {
-        /** @var \PDO $dbh */
-        $dbh = $this->container['dbh'];
-        $tables = [];
-        foreach($dbh->query('SHOW TABLES') as $row) {
-            $tables[] = $row[0];
-        }
-        return $tables;
-    }
-
-    /**
-     * @param $tablename
-     * @return mixed
-     */
-    public function getCreateTable($tablename)
-    {
-        /** @var \PDO $dbh */
-        $dbh = $this->container['dbh'];
-        $stmt = $dbh->query(sprintf('SHOW CREATE TABLE `%s`', $tablename));
-        return $stmt->fetchColumn(1);
-    }
+//    /**
+//     * @return array
+//     */
+//    public function listTables()
+//    {
+//        /** @var \PDO $dbh */
+//        $dbh = $this->container['dbh'];
+//        $tables = [];
+//        foreach($dbh->query('SHOW TABLES') as $row) {
+//            $tables[] = $row[0];
+//        }
+//        return $tables;
+//    }
+//
+//    /**
+//     * @param $tablename
+//     * @return mixed
+//     */
+//    public function getCreateTable($tablename)
+//    {
+//        /** @var \PDO $dbh */
+//        $dbh = $this->container['dbh'];
+//        $stmt = $dbh->query(sprintf('SHOW CREATE TABLE `%s`', $tablename));
+//        return $stmt->fetchColumn(1);
+//    }
 
     /**
      * @param string $create
@@ -116,7 +116,7 @@ class Bootstrap
      */
     public function __invoke()
     {
-        $this->connectToDatabase();
+//        $this->connectToDatabase();
 
         $tables = [];
 

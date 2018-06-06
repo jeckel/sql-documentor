@@ -73,6 +73,40 @@ class CreateTableParser
         return $table;
     }
 
+    /**
+     * @param Table $table
+     * @param string $sql
+     * @return Table
+     */
+    public function parseTable(Table $table, string $sql)
+    {
+        $parsed = $this->sqlParser->parse($sql);
+
+        $this->logger && $this->logger->debug(print_r($parsed, true));
+
+        $table->setName($parsed['TABLE']['no_quotes']['parts'][0]);
+
+        foreach($parsed['TABLE']['create-def']['sub_tree'] as $createDef)
+        {
+            /*if ($createDef['expr_type'] != 'column-def') {
+                printf("Unknown type: %s \n", $createDef['expr_type']);
+                continue;
+            }*/
+
+            switch($createDef['expr_type']) {
+                case 'column-def':
+                    $this->parseColumn($table, $createDef);
+                    break;
+                case 'index':
+                case 'foreign-key':
+                    break;
+                default:
+                    printf("Unknown type: %s \n", $createDef['expr_type']);
+            }
+        }
+        return $table;
+    }
+
 
     protected function parseColumn(Table $table, array $createDef)
     {

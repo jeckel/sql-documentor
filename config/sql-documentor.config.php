@@ -21,6 +21,8 @@ return [
             \SqlDocumentor\Services\YamlParser::class        => \SqlDocumentor\Factory\YamlParserFactory::class,
             \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
             'dbh'                                            => \SqlDocumentor\Factory\DbConnectionFactory::class,
+            \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
+            \SqlDocumentor\Services\TableParser::class       => \SqlDocumentor\Factory\TableParserFactory::class,
         ],
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class
