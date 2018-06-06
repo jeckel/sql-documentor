@@ -23,7 +23,7 @@ class YamlParserFactory
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $parser = new YamlParser();
-        $parser->setYmlDir($container->get('config')->get('YML_DIRECTORY'));
+        $parser->setYmlDir($container->get('config')->path->yml);
         return $parser;
     }
 }

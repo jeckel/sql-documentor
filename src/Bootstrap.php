@@ -3,7 +3,9 @@ namespace SqlDocumentor;
 
 use Pimple\Container;
 //use SqlDocumentor\Services\Config;
-use SqlDocumentor\Table\Table;
+use SqlDocumentor\Services\DbParser;
+use SqlDocumentor\Services\TableParser;
+use SqlDocumentor\Services\TemplateProcessor;
 use Zend\Config\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -26,7 +28,7 @@ class Bootstrap
     public function __construct(array $config)
     {
         $this->config = new Config($config);
-        $this->serviceManager = new ServiceManager($this->config->get('service_manager'));
+        $this->serviceManager = new ServiceManager($this->config->get('service_manager')->toArray());
         $this->serviceManager->setService('config', $this->config);
     }
 
@@ -94,43 +96,70 @@ class Bootstrap
 //        return $stmt->fetchColumn(1);
 //    }
 
-    /**
-     * @param string $create
-     * @return Table
-     * @throws \Exception
-     */
-    public function parse(string $create): Table
-    {
-        /** @var Config $config */
-        $config = $this->container['config'];
-
-        $table = $this->container['create-table-parser']->parse($create);
-        $table = $this->container['yaml-parser']->parse($table);
-        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
-        $generator->generate($table, __DIR__.'/Template/table.md.php');
-        return $table;
-    }
+//    /**
+//     * @param string $create
+//     * @return Table
+//     * @throws \Exception
+//     */
+//    public function parse(string $create): Table
+//    {
+//        /** @var Config $config */
+//        $config = $this->container['config'];
+//
+//        $table = $this->container['create-table-parser']->parse($create);
+//        $table = $this->container['yaml-parser']->parse($table);
+//        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
+//        $generator->generate($table, __DIR__.'/Template/table.md.php');
+//        return $table;
+//    }
 
     /**
      * @throws \Exception
      */
     public function __invoke()
     {
-//        $this->connectToDatabase();
+        /** @var DbParser $dbParser */
+        $dbParser = $this->serviceManager->get(DbParser::class);
+
+        /** @var TableParser $tableParser */
+        $tableParser = $this->serviceManager->get(TableParser::class);
+
+        $templateProcessor = $this->serviceManager->get(TemplateProcessor::class);
+
+        $config = $this->serviceManager->get('config');
 
         $tables = [];
 
-        foreach($this->listTables() as $tableName) {
-            $table = $this->parse($this->getCreateTable($tableName));
+        foreach($dbParser->listTables() as $tableName) {
+            $table = $tableParser->parseTable($tableName);
+
+            $output = sprintf('%s%s.md', $config->path->target, $table->getName());
+
+            $templateProcessor->processToFile(
+                $config->path->templates . 'table.md.php',
+                $output,
+                ['table' => $table]
+            );
+
             $tables[$table->getName()] = $table;
         }
 
-        /** @var Config $config */
-        $config = $this->container['config'];
-        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
-        $generator->generateTpl(__DIR__.'/Template/index.md.php', 'index.md', ['tables' => $tables]);
 
-        echo "done\n";
+//        $this->connectToDatabase();
+
+//        $tables = [];
+//
+//        foreach($this->listTables() as $tableName) {
+//            $table = $this->parse($this->getCreateTable($tableName));
+//            $tables[$table->getName()] = $table;
+//        }
+//
+//        /** @var Config $config */
+//        $config = $this->container['config'];
+//        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
+//        $generator->generateTpl(__DIR__.'/Template/index.md.php', 'index.md', ['tables' => $tables]);
+//
+//        echo "done\n";
     }
 
     /**
