@@ -68,14 +68,4 @@ class Bootstrap
             ['tables' => $tables]
         );
     }
-
-    /**
-     * @param string $message
-     * @return $this
-     */
-    public function log(string $message)
-    {
-        printf($message . "\n");
-        return $this;
-    }
 }

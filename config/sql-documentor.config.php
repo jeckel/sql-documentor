@@ -20,10 +20,14 @@ return [
             'dbh'                                            => \SqlDocumentor\Factory\DbConnectionFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
             \SqlDocumentor\Services\TableParser::class       => \SqlDocumentor\Factory\TableParserFactory::class,
+            'logger'                                         => \SqlDocumentor\Factory\LoggerFactory::class,
         ],
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,
             \SqlDocumentor\Services\TemplateProcessor::class => \SqlDocumentor\Services\TemplateProcessor::class,
+        ],
+        'initializers' => [
+            \SqlDocumentor\Initializer\LoggerInitializer::class,
         ]
     ],
 ];

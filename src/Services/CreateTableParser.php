@@ -38,76 +38,42 @@ class CreateTableParser
     }
 
     /**
-     * @param $sql
+     * @param Table $table
+     * @param string $sql
      * @return Table
      */
-    public function parse(string $sql): Table
+    public function parseTable(Table $table, string $sql): Table
     {
         $parsed = $this->sqlParser->parse($sql);
+        $table->setName($parsed['TABLE']['no_quotes']['parts'][0]);
 
-        $this->logger && $this->logger->debug(print_r($parsed, true));
-
-        $table = new Table();
-        $table->setCreateQuery($sql)
-            ->setName($parsed['TABLE']['no_quotes']['parts'][0]);
+        if (! is_array($parsed['TABLE']['create-def']['sub_tree'])) {
+            $this->logger && $this->logger->critical("Invalid parsing columns for table '{$table->getName()}'");
+            return $table;
+        }
 
         foreach($parsed['TABLE']['create-def']['sub_tree'] as $createDef)
         {
-            /*if ($createDef['expr_type'] != 'column-def') {
-                printf("Unknown type: %s \n", $createDef['expr_type']);
-                continue;
-            }*/
-
             switch($createDef['expr_type']) {
                 case 'column-def':
                     $this->parseColumn($table, $createDef);
                     break;
+                case 'primary-key':
+                case 'unique-index':
                 case 'index':
                 case 'foreign-key':
                     break;
                 default:
-                    printf("Unknown type: %s \n", $createDef['expr_type']);
+                    $this->logger && $this->logger->warning("Unknown type: {$createDef['expr_type']}");
             }
         }
-
         return $table;
     }
 
     /**
      * @param Table $table
-     * @param string $sql
-     * @return Table
+     * @param array $createDef
      */
-    public function parseTable(Table $table, string $sql)
-    {
-        $parsed = $this->sqlParser->parse($sql);
-
-        $this->logger && $this->logger->debug(print_r($parsed, true));
-
-        $table->setName($parsed['TABLE']['no_quotes']['parts'][0]);
-
-        foreach($parsed['TABLE']['create-def']['sub_tree'] as $createDef)
-        {
-            /*if ($createDef['expr_type'] != 'column-def') {
-                printf("Unknown type: %s \n", $createDef['expr_type']);
-                continue;
-            }*/
-
-            switch($createDef['expr_type']) {
-                case 'column-def':
-                    $this->parseColumn($table, $createDef);
-                    break;
-                case 'index':
-                case 'foreign-key':
-                    break;
-                default:
-                    printf("Unknown type: %s \n", $createDef['expr_type']);
-            }
-        }
-        return $table;
-    }
-
-
     protected function parseColumn(Table $table, array $createDef)
     {
         $type = sprintf(
@@ -116,8 +82,6 @@ class CreateTableParser
             $createDef['sub_tree'][1]['sub_tree'][0]['length']
         );
 
-        //var_dump($createDef['sub_tree']);
-
         $column = new Column();
         $column->setName($createDef['sub_tree'][0]['no_quotes']['parts'][0])
             ->setType($type)
@@ -125,11 +89,11 @@ class CreateTableParser
             ->setAutoIncrement($createDef['sub_tree'][1]['auto_inc'] == 1);
 
         if ($createDef['sub_tree'][1]['unique'] == 1) {
-            printf('Unique\n');
+            $this->logger && $this->logger->info("Column {$column->getName()} is Unique ?");
             //$attributes[] = $this->output->getInlineCode('Unique');
         }
         if ($createDef['sub_tree'][1]['primary'] == 1) {
-            printf('Primary\n');
+            $this->logger && $this->logger->info("Column {$column->getName()} is Primary ?");
             //$attributes[] = $this->output->getInlineCode('Primary');
         }
         $table->addColumn($column);

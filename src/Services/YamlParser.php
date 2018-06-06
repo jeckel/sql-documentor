@@ -1,6 +1,8 @@
 <?php
-
 namespace SqlDocumentor\Services;
+
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use SqlDocumentor\Table\Column;
 use SqlDocumentor\Table\Table;
 
@@ -9,33 +11,41 @@ use SqlDocumentor\Table\Table;
  * @package SqlDocumentor\Services
  */
 class YamlParser
+    implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /** @var string */
     protected $ymlDir;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getYmlDir()
+    public function getYmlDir(): string
     {
         return $this->ymlDir;
     }
 
     /**
-     * @param mixed $ymlDir
+     * @param string $ymlDir
      * @return YamlParser
      */
-    public function setYmlDir($ymlDir)
+    public function setYmlDir(string $ymlDir): YamlParser
     {
         $this->ymlDir = $ymlDir;
         return $this;
     }
 
-
-    public function parse(Table $table)
+    /**
+     * @param Table $table
+     * @return Table
+     * @throws \Exception
+     */
+    public function parse(Table $table): Table
     {
         $filePath = sprintf('%s/%s.yml', $this->ymlDir, $table->getName());
         if (! is_readable($filePath)) {
-            printf('No readable YML file for table %s\n', $table->getName());
+            $this->logger && $this->logger->warning("No readable YML file for table '{$table->getName()}'");
             return $table;
         }
         $yaml = yaml_parse_file($filePath);
@@ -56,6 +66,11 @@ class YamlParser
         return $table;
     }
 
+    /**
+     * @param Column $column
+     * @param array $yaml
+     * @return Column
+     */
     protected function updateColumn(Column $column, array $yaml): Column
     {
         if (isset($yaml['comment'])) {
@@ -64,6 +79,11 @@ class YamlParser
         return $column;
     }
 
+    /**
+     * @param Table $table
+     * @param array $yaml
+     * @return Table
+     */
     protected function updateTable(Table $table, array $yaml): Table
     {
         if (isset($yaml['desc'])) {
