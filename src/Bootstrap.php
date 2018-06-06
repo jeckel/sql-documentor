@@ -27,6 +27,7 @@ class Bootstrap
     {
         $this->config = new Config($config);
         $this->serviceManager = new ServiceManager($this->config->get('service_manager'));
+        $this->serviceManager->setService('config', $this->config);
     }
 
 //    /** @var Container */
@@ -45,27 +46,27 @@ class Bootstrap
 //            $this->container[$serviceName] = $builder;
 //        }
 //    }
-
-    /**
-     * @return $this
-     * @throws \Exception
-     */
-    public function connectToDatabase()
-    {
-        /** @var Config $config */
-        $config = $this->container['config'];
-
-        $this->container['dbh'] = new \PDO(
-            sprintf(
-                'mysql:dbname=%s;host=%s',
-                $config->get('MYSQL_DATABASE'),
-                $config->get('MYSQL_HOST')
-            ),
-            $config->get('MYSQL_USER'),
-            $config->get('MYSQL_PASSWORD')
-        );
-        return $this;
-    }
+//
+//    /**
+//     * @return $this
+//     * @throws \Exception
+//     */
+//    public function connectToDatabase()
+//    {
+//        /** @var Config $config */
+//        $config = $this->container['config'];
+//
+//        $this->container['dbh'] = new \PDO(
+//            sprintf(
+//                'mysql:dbname=%s;host=%s',
+//                $config->get('MYSQL_DATABASE'),
+//                $config->get('MYSQL_HOST')
+//            ),
+//            $config->get('MYSQL_USER'),
+//            $config->get('MYSQL_PASSWORD')
+//        );
+//        return $this;
+//    }
 
     /**
      * @return array
