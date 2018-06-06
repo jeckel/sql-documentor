@@ -32,87 +32,6 @@ class Bootstrap
         $this->serviceManager->setService('config', $this->config);
     }
 
-//    /** @var Container */
-//    protected $container;
-//
-//    /**
-//     * Bootstrap constructor.
-//     * @param array $bootstrap
-//     */
-//    public function __construct(array $bootstrap)
-//    {
-//        $this->container = new Container();
-//        $this->container['config'] = new Config($bootstrap['config']);
-//
-//        foreach($bootstrap['services'] as $serviceName=>$builder) {
-//            $this->container[$serviceName] = $builder;
-//        }
-//    }
-//
-//    /**
-//     * @return $this
-//     * @throws \Exception
-//     */
-//    public function connectToDatabase()
-//    {
-//        /** @var Config $config */
-//        $config = $this->container['config'];
-//
-//        $this->container['dbh'] = new \PDO(
-//            sprintf(
-//                'mysql:dbname=%s;host=%s',
-//                $config->get('MYSQL_DATABASE'),
-//                $config->get('MYSQL_HOST')
-//            ),
-//            $config->get('MYSQL_USER'),
-//            $config->get('MYSQL_PASSWORD')
-//        );
-//        return $this;
-//    }
-
-//    /**
-//     * @return array
-//     */
-//    public function listTables()
-//    {
-//        /** @var \PDO $dbh */
-//        $dbh = $this->container['dbh'];
-//        $tables = [];
-//        foreach($dbh->query('SHOW TABLES') as $row) {
-//            $tables[] = $row[0];
-//        }
-//        return $tables;
-//    }
-//
-//    /**
-//     * @param $tablename
-//     * @return mixed
-//     */
-//    public function getCreateTable($tablename)
-//    {
-//        /** @var \PDO $dbh */
-//        $dbh = $this->container['dbh'];
-//        $stmt = $dbh->query(sprintf('SHOW CREATE TABLE `%s`', $tablename));
-//        return $stmt->fetchColumn(1);
-//    }
-
-//    /**
-//     * @param string $create
-//     * @return Table
-//     * @throws \Exception
-//     */
-//    public function parse(string $create): Table
-//    {
-//        /** @var Config $config */
-//        $config = $this->container['config'];
-//
-//        $table = $this->container['create-table-parser']->parse($create);
-//        $table = $this->container['yaml-parser']->parse($table);
-//        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
-//        $generator->generate($table, __DIR__.'/Template/table.md.php');
-//        return $table;
-//    }
-
     /**
      * @throws \Exception
      */
@@ -124,19 +43,18 @@ class Bootstrap
         /** @var TableParser $tableParser */
         $tableParser = $this->serviceManager->get(TableParser::class);
 
+        /** @var TemplateProcessor $templateProcessor */
         $templateProcessor = $this->serviceManager->get(TemplateProcessor::class);
-
-        $config = $this->serviceManager->get('config');
 
         $tables = [];
 
         foreach($dbParser->listTables() as $tableName) {
             $table = $tableParser->parseTable($tableName);
 
-            $output = sprintf('%s%s.md', $config->path->target, $table->getName());
+            $output = sprintf('%s%s.md', $this->config->path->target, $table->getName());
 
             $templateProcessor->processToFile(
-                $config->path->templates . 'table.md.php',
+                $this->config->path->templates . 'table.md.php',
                 $output,
                 ['table' => $table]
             );
@@ -144,22 +62,11 @@ class Bootstrap
             $tables[$table->getName()] = $table;
         }
 
-
-//        $this->connectToDatabase();
-
-//        $tables = [];
-//
-//        foreach($this->listTables() as $tableName) {
-//            $table = $this->parse($this->getCreateTable($tableName));
-//            $tables[$table->getName()] = $table;
-//        }
-//
-//        /** @var Config $config */
-//        $config = $this->container['config'];
-//        $generator = new TemplateGenerator($config->get('TARGET_DIRECTORY'));
-//        $generator->generateTpl(__DIR__.'/Template/index.md.php', 'index.md', ['tables' => $tables]);
-//
-//        echo "done\n";
+        $templateProcessor->processToFile(
+            $this->config->path->templates . 'index.md.php',
+            $this->config->path->target . 'index.md',
+            ['tables' => $tables]
+        );
     }
 
     /**
