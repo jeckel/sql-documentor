@@ -8,15 +8,16 @@ namespace SqlDocumentor\Table;
  */
 class Column
 {
-    const FLAG_NULL = 'NULL';
-    const FLAG_NOT_NULL = 'NOT NULL';
-    const FLAG_AUTOINCREMENT = 'AUTO-INCREMENT';
-
     /** @var string */
     protected $name = '';
 
     /** @var string */
     protected $type = '';
+
+    /** @var bool  */
+    protected $nullable = true;
+    /** @var bool  */
+    protected $autoIncrement = false;
 
     /** @var string */
     protected $comment = '';
@@ -65,35 +66,31 @@ class Column
      */
     public function isNullable(): bool
     {
-        return $this->hasFlag(self::FLAG_NULL);
+        return $this->nullable;
     }
-
     /**
      * @param bool $nullable
      * @return Column
      */
     public function setNullable(bool $nullable): Column
     {
-        $nullable ? $this->addFlag(self::FLAG_NULL) : self::delFlag(self::FLAG_NULL);
-        $nullable ? $this->delFlag(self::FLAG_NOT_NULL) : self::addFlag(self::FLAG_NOT_NULL);
+        $this->nullable = $nullable;
         return $this;
     }
-
     /**
      * @return bool
      */
     public function isAutoIncrement(): bool
     {
-        return $this->hasFlag(self::FLAG_AUTOINCREMENT);
+        return $this->autoIncrement;
     }
-
     /**
      * @param bool $autoIncrement
      * @return Column
      */
     public function setAutoIncrement(bool $autoIncrement): Column
     {
-        $autoIncrement ? $this->addFlag(self::FLAG_AUTOINCREMENT) : $this->delFlag(self::FLAG_AUTOINCREMENT);
+        $this->autoIncrement = $autoIncrement;
         return $this;
     }
 

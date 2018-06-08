@@ -77,8 +77,9 @@ class YamlParser
             $column->setComment($yaml['comment']);
         }
         if (isset($yaml['flags'])) {
-            var_dump($yaml);
-            die;
+            foreach($yaml['flags'] as $flag) {
+                $column->addFlag(strtoupper($flag));
+            }
         }
         return $column;
     }
