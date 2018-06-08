@@ -23,6 +23,9 @@ class Column
     /** @var string */
     protected $comment = '';
 
+    /** @var array */
+    protected $flags = [];
+
     /**
      * @param string $name
      * @return Column
@@ -111,5 +114,42 @@ class Column
     {
         $this->comment = $comment;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlags(): array
+    {
+        return array_keys($this->flags);
+    }
+
+    /**
+     * @param string $flag
+     * @return Column
+     */
+    public function addFlag(string $flag): Column
+    {
+        $this->flags[$flag] = true;
+        return $this;
+    }
+
+    /**
+     * @param string $flag
+     * @return Column
+     */
+    public function delFlag(string $flag): Column
+    {
+        unset($this->flags[$flag]);
+        return $this;
+    }
+
+    /**
+     * @param string $flag
+     * @return bool
+     */
+    public function hasFlag(string $flag): bool
+    {
+        return isset($this->flags[$flag]);
     }
 }

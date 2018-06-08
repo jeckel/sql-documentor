@@ -55,6 +55,8 @@ columns:
     comment: "User's `username`"
   group_id:
     comment: "Foreign key to (group)[group.md] table"
+    flags:
+      - deprecated
 ```
 
 
