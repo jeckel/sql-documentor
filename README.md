@@ -42,13 +42,19 @@ Example:
 
 ## Sample
 
+You can use Markdown in all strings
+
 ```yaml
 table:
-  desc: "Je ne sais pas encore"
-
+  short-desc: "Very usefull table to manager users"
+  desc: "**User Table**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 columns:
-  id_parent:
-    comment: "Clé \"étrangère\" vers l'`id` parent sur la même table"
+  id:
+    comment: "Usefull primary key"
+  username:
+    comment: "User's `username`"
+  group_id:
+    comment: "Foreign key to (group)[group.md] table"
 ```
 
 
