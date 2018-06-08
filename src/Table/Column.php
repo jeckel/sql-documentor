@@ -10,7 +10,7 @@ class Column
 {
     const FLAG_NULL = 'NULL';
     const FLAG_NOT_NULL = 'NOT NULL';
-    const FLAG_AUTOINCREMENT = 'Auto-Increment';
+    const FLAG_AUTOINCREMENT = 'AUTO-INCREMENT';
 
     /** @var string */
     protected $name = '';

@@ -76,6 +76,10 @@ class YamlParser
         if (isset($yaml['comment'])) {
             $column->setComment($yaml['comment']);
         }
+        if (isset($yaml['flags'])) {
+            var_dump($yaml);
+            die;
+        }
         return $column;
     }
 
