@@ -25,8 +25,6 @@ run:
 
 up:
 	docker-compose up -d mysql
-	echo "Wait mariadb init"
-	sleep 10
 	docker-compose run --rm php
 
 down:
