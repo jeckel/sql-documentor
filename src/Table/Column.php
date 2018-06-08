@@ -8,20 +8,21 @@ namespace SqlDocumentor\Table;
  */
 class Column
 {
+    const FLAG_NULL = 'NULL';
+    const FLAG_NOT_NULL = 'NOT NULL';
+    const FLAG_AUTOINCREMENT = 'Auto-Increment';
+
     /** @var string */
     protected $name = '';
 
     /** @var string */
     protected $type = '';
 
-    /** @var bool  */
-    protected $nullable = true;
-
-    /** @var bool  */
-    protected $autoIncrement = false;
-
     /** @var string */
     protected $comment = '';
+
+    /** @var array */
+    protected $flags = [];
 
     /**
      * @param string $name
@@ -64,7 +65,7 @@ class Column
      */
     public function isNullable(): bool
     {
-        return $this->nullable;
+        return $this->hasFlag(self::FLAG_NULL);
     }
 
     /**
@@ -73,7 +74,8 @@ class Column
      */
     public function setNullable(bool $nullable): Column
     {
-        $this->nullable = $nullable;
+        $nullable ? $this->addFlag(self::FLAG_NULL) : self::delFlag(self::FLAG_NULL);
+        $nullable ? $this->delFlag(self::FLAG_NOT_NULL) : self::addFlag(self::FLAG_NOT_NULL);
         return $this;
     }
 
@@ -82,7 +84,7 @@ class Column
      */
     public function isAutoIncrement(): bool
     {
-        return $this->autoIncrement;
+        return $this->hasFlag(self::FLAG_AUTOINCREMENT);
     }
 
     /**
@@ -91,7 +93,7 @@ class Column
      */
     public function setAutoIncrement(bool $autoIncrement): Column
     {
-        $this->autoIncrement = $autoIncrement;
+        $autoIncrement ? $this->addFlag(self::FLAG_AUTOINCREMENT) : $this->delFlag(self::FLAG_AUTOINCREMENT);
         return $this;
     }
 
@@ -111,5 +113,42 @@ class Column
     {
         $this->comment = $comment;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlags(): array
+    {
+        return array_keys($this->flags);
+    }
+
+    /**
+     * @param string $flag
+     * @return Column
+     */
+    public function addFlag(string $flag): Column
+    {
+        $this->flags[$flag] = true;
+        return $this;
+    }
+
+    /**
+     * @param string $flag
+     * @return Column
+     */
+    public function delFlag(string $flag): Column
+    {
+        unset($this->flags[$flag]);
+        return $this;
+    }
+
+    /**
+     * @param string $flag
+     * @return bool
+     */
+    public function hasFlag(string $flag): bool
+    {
+        return isset($this->flags[$flag]);
     }
 }
