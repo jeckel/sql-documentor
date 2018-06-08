@@ -15,6 +15,9 @@ class Table
     protected $description = '';
 
     /** @var string */
+    protected $shortDesc = '';
+
+    /** @var string */
     protected $createQuery = '';
 
     /** @var array  */
@@ -53,6 +56,28 @@ class Table
     public function setDescription(string $description): Table
     {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortDesc(): string
+    {
+        if (! empty($this->shortDesc)) {
+            return $this->shortDesc;
+        }
+        // if no short desc, return first line of long desc
+        return empty($this->description)?'':strtok($this->description, "\n");
+    }
+
+    /**
+     * @param string $shortDesc
+     * @return Table
+     */
+    public function setShortDesc(string $shortDesc): Table
+    {
+        $this->shortDesc = $shortDesc;
         return $this;
     }
 

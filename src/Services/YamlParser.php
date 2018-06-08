@@ -89,6 +89,9 @@ class YamlParser
         if (isset($yaml['desc'])) {
             $table->setDescription($yaml['desc']);
         }
+        if (isset($yaml['short-desc'])) {
+            $table->setShortDesc($yaml['short-desc']);
+        }
         return $table;
     }
 }
