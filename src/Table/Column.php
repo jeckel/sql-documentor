@@ -68,6 +68,7 @@ class Column
     {
         return $this->nullable;
     }
+
     /**
      * @param bool $nullable
      * @return Column
@@ -77,6 +78,7 @@ class Column
         $this->nullable = $nullable;
         return $this;
     }
+
     /**
      * @return bool
      */
@@ -84,6 +86,7 @@ class Column
     {
         return $this->autoIncrement;
     }
+
     /**
      * @param bool $autoIncrement
      * @return Column
