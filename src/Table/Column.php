@@ -16,6 +16,7 @@ class Column
 
     /** @var bool  */
     protected $nullable = true;
+
     /** @var bool  */
     protected $autoIncrement = false;
 
