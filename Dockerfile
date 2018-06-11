@@ -30,7 +30,6 @@ RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/863c57de1807
 RUN mkdir -p /tmp/composer && chmod 777 /tmp/composer
 ENV COMPOSER_CACHE_DIR=/tmp/composer
 
-
 # Install Wait-for-it
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/local/bin/wait-for-it && \
     chmod +x /usr/local/bin/wait-for-it

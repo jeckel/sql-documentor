@@ -1,5 +1,8 @@
 .*
+/docs
+/sql
+/yml
+/vendor
+docker-compose.yml
 Dockerfile
 Makefile
-docker-compose.yml
-vendor
