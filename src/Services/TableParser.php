@@ -1,14 +1,19 @@
 <?php
 
 namespace SqlDocumentor\Services;
-use SqlDocumentor\Table\Table;
+use SqlDocumentor\Model\Table;
+use SqlDocumentor\Model\TableFactoryAwareInterface;
+use SqlDocumentor\Model\TableFactoryAwareTrait;
 
 /**
  * Class TableParser
  * @package SqlDocumentor\Services
  */
 class TableParser
+    implements TableFactoryAwareInterface
 {
+    use TableFactoryAwareTrait;
+
     /** @var YamlParser */
     protected $ymlParser;
 
@@ -79,8 +84,10 @@ class TableParser
      */
     public function parseTable(string $tableName): Table
     {
+        $table = $this->tableFactory->factory($tableName);
+
         $createQuery = $this->dbParser->getCreateTable($tableName);
-        $table = new Table();
+//        $table = new Table();
         $table->setCreateQuery($createQuery);
 
         $this->createTableParser->parseTable($table, $createQuery);

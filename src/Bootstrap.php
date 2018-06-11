@@ -1,8 +1,6 @@
 <?php
 namespace SqlDocumentor;
 
-use Pimple\Container;
-//use SqlDocumentor\Services\Config;
 use SqlDocumentor\Services\DbParser;
 use SqlDocumentor\Services\TableParser;
 use SqlDocumentor\Services\TemplateProcessor;

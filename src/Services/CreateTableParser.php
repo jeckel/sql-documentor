@@ -1,20 +1,27 @@
 <?php
 
 namespace SqlDocumentor\Services;
+
 use PHPSQLParser\PHPSQLParser;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SqlDocumentor\Table\Column;
-use SqlDocumentor\Table\Table;
+use SqlDocumentor\Model\Column;
+use SqlDocumentor\Model\ColumnFactoryAwareInterface;
+use SqlDocumentor\Model\ColumnFactoryAwareTrait;
+use SqlDocumentor\Model\Table;
+use SqlDocumentor\Model\TableFactoryAwareInterface;
+use SqlDocumentor\Model\TableFactoryAwareTrait;
 
 /**
  * Class CreateTableParser
  * @package SqlDocumentor\Services
  */
 class CreateTableParser
-    implements LoggerAwareInterface
+    implements LoggerAwareInterface, TableFactoryAwareInterface, ColumnFactoryAwareInterface
 {
     use LoggerAwareTrait;
+    use TableFactoryAwareTrait;
+    use ColumnFactoryAwareTrait;
 
     /** @var PHPSQLParser */
     protected $sqlParser;
@@ -82,9 +89,9 @@ class CreateTableParser
             $createDef['sub_tree'][1]['sub_tree'][0]['length']
         );
 
-        $column = new Column();
-        $column->setName($createDef['sub_tree'][0]['no_quotes']['parts'][0])
-            ->setType($type)
+        /** @var Column $column */
+        $column = $this->columnFactory->factory($createDef['sub_tree'][0]['no_quotes']['parts'][0]);
+        $column->setType($type)
             ->setNullable($createDef['sub_tree'][1]['nullable'] == 1)
             ->setAutoIncrement($createDef['sub_tree'][1]['auto_inc'] == 1);
 
