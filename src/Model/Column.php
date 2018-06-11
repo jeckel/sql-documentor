@@ -1,10 +1,10 @@
 <?php
 
-namespace SqlDocumentor\Table;
+namespace SqlDocumentor\Model;
 
 /**
  * Class Column
- * @package SqlDocumentor\Table
+ * @package SqlDocumentor\Model
  */
 class Column
 {
@@ -25,6 +25,15 @@ class Column
 
     /** @var array */
     protected $flags = [];
+
+    /**
+     * Column constructor.
+     * @param string $columnName
+     */
+    public function __construct(string $columnName)
+    {
+        $this->setName($columnName);
+    }
 
     /**
      * @param string $name

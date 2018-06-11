@@ -1,10 +1,10 @@
 <?php
 
-namespace SqlDocumentor\Table;
+namespace SqlDocumentor\Model;
 
 /**
  * Class Table
- * @package SqlDocumentor\Table
+ * @package SqlDocumentor\Model
  */
 class Table
 {
@@ -22,6 +22,15 @@ class Table
 
     /** @var array  */
     protected $columns = [];
+
+    /**
+     * Table constructor.
+     * @param string $tableName
+     */
+    public function __construct(string $tableName)
+    {
+        $this->setName($tableName);
+    }
 
     /**
      * @return string
