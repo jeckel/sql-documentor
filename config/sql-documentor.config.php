@@ -15,19 +15,22 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            'dbh'                                            => \SqlDocumentor\Factory\DbConnectionFactory::class,
+            'logger'                                         => \SqlDocumentor\Factory\LoggerFactory::class,
             \SqlDocumentor\Services\YamlParser::class        => \SqlDocumentor\Factory\YamlParserFactory::class,
             \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
-            'dbh'                                            => \SqlDocumentor\Factory\DbConnectionFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
             \SqlDocumentor\Services\TableParser::class       => \SqlDocumentor\Factory\TableParserFactory::class,
-            'logger'                                         => \SqlDocumentor\Factory\LoggerFactory::class,
         ],
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,
             \SqlDocumentor\Services\TemplateProcessor::class => \SqlDocumentor\Services\TemplateProcessor::class,
+            \SqlDocumentor\Model\TableFactory::class         => \SqlDocumentor\Model\TableFactory::class,
+            \SqlDocumentor\Model\ColumnFactory::class        => \SqlDocumentor\Model\ColumnFactory::class,
         ],
         'initializers' => [
             \SqlDocumentor\Initializer\LoggerInitializer::class,
+            \SqlDocumentor\Initializer\Initializer::class,
         ]
     ],
 ];
