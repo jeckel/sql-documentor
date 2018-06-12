@@ -6,22 +6,16 @@ use PHPSQLParser\PHPSQLParser;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use SqlDocumentor\Model\Column;
-use SqlDocumentor\Model\ColumnFactoryAwareInterface;
-use SqlDocumentor\Model\ColumnFactoryAwareTrait;
 use SqlDocumentor\Model\Table;
-use SqlDocumentor\Model\TableFactoryAwareInterface;
-use SqlDocumentor\Model\TableFactoryAwareTrait;
 
 /**
  * Class CreateTableParser
  * @package SqlDocumentor\Services
  */
 class CreateTableParser
-    implements LoggerAwareInterface, TableFactoryAwareInterface, ColumnFactoryAwareInterface
+    implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
-    use TableFactoryAwareTrait;
-    use ColumnFactoryAwareTrait;
 
     /** @var PHPSQLParser */
     protected $sqlParser;
