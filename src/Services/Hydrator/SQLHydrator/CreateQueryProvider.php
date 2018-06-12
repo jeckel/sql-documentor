@@ -55,7 +55,7 @@ class CreateQueryProvider
                 $toReturn['primary-key'] = $this->parsePrimaryKey($row);
             } elseif (strpos($row, 'KEY') === 0) {
                 $toReturn['keys'][] = $this->parseKey($row);
-            } elseif (strpos($row, 'CONSTRAINT') === 0git res) {
+            } elseif (strpos($row, 'CONSTRAINT') === 0) {
                 $toReturn['foreign-keys'][] = $this->parseForeignKey($row);
             } else {
                 $this->logger->warning("Unable to parse row data: {$row}");

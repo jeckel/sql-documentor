@@ -32,7 +32,6 @@ return [
         ],
         'initializers' => [
             \SqlDocumentor\Initializer\LoggerInitializer::class,
-            \SqlDocumentor\Initializer\Initializer::class,
         ]
     ],
 ];
