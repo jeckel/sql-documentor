@@ -1,6 +1,7 @@
 <?php
 
 namespace SqlDocumentor\Model;
+use SqlDocumentor\Model\Exception\ColumnNotFoundException;
 
 /**
  * Class Table
@@ -121,18 +122,22 @@ class Table
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return Column
-     * @throws \Exception
+     * @throws ColumnNotFoundException
      */
     public function getColumn(string $name): Column
     {
         if (! isset($this->columns[$name])) {
-            throw new \Exception("Column $name not defined");
+            throw new ColumnNotFoundException("Column $name not found");
         }
         return $this->columns[$name];
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function hasColumn(string $name): bool
     {
         return isset($this->columns[$name]);
