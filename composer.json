@@ -21,5 +21,8 @@
         "psr-4": {
             "SqlDocumentor\\": "src/"
         }
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.4"
     }
 }
