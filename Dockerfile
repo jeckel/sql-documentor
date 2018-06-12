@@ -21,6 +21,10 @@ RUN docker-php-ext-install pdo_mysql && \
     pecl install yaml-2.0.0 && \
     docker-php-ext-enable yaml
 
+# Install X-Debug
+RUN pecl install xdebug \
+        && docker-php-ext-enable xdebug
+
 # Install composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/863c57de1807c99d984f7b56f0ea56ebd7e5045b/web/installer -O - -q | php -- --quiet &&\
     mv composer.phar /usr/local/bin/composer && \
