@@ -24,7 +24,7 @@ codecept:
 	@${CODECEPT_CMD} ${CMD}
 
 test:
-	@${CODECEPT_CMD} run --steps
+	@${CODECEPT_CMD} run --steps --coverage
 
 #run: clear
 run:
