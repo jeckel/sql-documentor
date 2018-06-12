@@ -6,6 +6,7 @@ GID=$(shell id -g)
 DOCKER_IMAGE=sql-documentor
 DOCKER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} $(DOCKER_IMAGE)
 COMPOSER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
+CODECEPT_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint ./vendor/bin/codecept $(DOCKER_IMAGE)
 
 build:
 	@docker build -t ${DOCKER_IMAGE} .
@@ -18,6 +19,12 @@ composer-install:
 
 composer-update:
 	@${COMPOSER_CMD} update
+
+codecept:
+	@${CODECEPT_CMD} ${CMD}
+
+test:
+	@${CODECEPT_CMD} run --steps
 
 #run: clear
 run:
