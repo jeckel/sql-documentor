@@ -23,7 +23,7 @@ class TableFactory
     }
 
     /**
-     *
+     * @internal
      */
     public static function reset(): void
     {

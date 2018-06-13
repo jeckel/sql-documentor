@@ -26,6 +26,7 @@ return [
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,
             \SqlDocumentor\Model\ColumnFactory::class                                  => \SqlDocumentor\Model\ColumnFactory::class,
+            \SqlDocumentor\Model\TableFactory::class                                   => \SqlDocumentor\Model\TableFactory::class,
             \SqlDocumentor\Services\TemplateProcessor::class => \SqlDocumentor\Services\TemplateProcessor::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator::class          => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class        => \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class,
