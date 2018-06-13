@@ -60,7 +60,6 @@ class CreateQueryProvider implements LoggerAwareInterface
                 $this->logger->warning("Unable to parse row data: {$row}");
             }
         }
-
         return $toReturn;
     }
 
