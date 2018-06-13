@@ -12,6 +12,12 @@ class CreateQueryProvider implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    const ROW_TYPE_COLUMN      = 'column';
+    const ROW_TYPE_PRIMARY_KEY = 'primary-key';
+    const ROW_TYPE_KEY         = 'key';
+    const ROW_TYPE_FOREIGN_KEY = 'foreign-key';
+    const ROW_TYPE_UNKNOWN     = 'unknown';
+
     /** @var \PDO */
     protected $dbh;
 
@@ -48,19 +54,45 @@ class CreateQueryProvider implements LoggerAwareInterface
             // cleanup string
             $row = trim($rows[$i], ' ,()');
 
-            if (preg_match('/^`([a-zA-Z0-9_-]*)` (.*)$/m', $row, $matches)) {
-                $toReturn['columns'][$matches[1]] = $this->parseColumnMeta($matches[2]);
-            } elseif (strpos($row, 'PRIMARY KEY') === 0) {
-                $toReturn['primary-key'] = $this->parsePrimaryKey($row);
-            } elseif (strpos($row, 'KEY') === 0) {
-                $toReturn['keys'][] = $this->parseKey($row);
-            } elseif (strpos($row, 'CONSTRAINT') === 0) {
-                $toReturn['foreign-keys'][] = $this->parseForeignKey($row);
-            } else {
-                $this->logger->warning("Unable to parse row data: {$row}");
+            switch ($this->getRowType($row)) {
+                case self::ROW_TYPE_COLUMN:
+                    preg_match('/^`([a-zA-Z0-9_-]*)` (.*)$/m', $row, $matches);
+                    $toReturn['columns'][$matches[1]] = $this->parseColumnMeta($matches[2]);
+                    break;
+                case self::ROW_TYPE_PRIMARY_KEY:
+                    $toReturn['primary-key'] = $this->parsePrimaryKey($row);
+                    break;
+                case self::ROW_TYPE_KEY:
+                    preg_match('/^KEY `([a-zA-Z0-9_-]*)` (.*)$/m', $row, $matches);
+                    $toReturn['keys'][$matches[1]] = $this->parseKey($matches[2]);
+                    break;
+                case self::ROW_TYPE_FOREIGN_KEY:
+                    preg_match('/FOREIGN KEY \(`([a-zA-Z0-9_-]*)`\) (.*)$/m', $row, $matches);
+                    $toReturn['foreign-keys'][$matches[1]] = $this->parseForeignKey($row);
+                    break;
+                default:
+                    $this->logger->warning("Unable to parse row data: {$row}");
             }
         }
         return $toReturn;
+    }
+
+    /**
+     * @param string $row
+     * @return string
+     */
+    protected function getRowType(string $row): string
+    {
+        if (preg_match('/^`([a-zA-Z0-9_-]*)` (.*)$/m', $row, $matches)) {
+            return self::ROW_TYPE_COLUMN;
+        } elseif (strpos($row, 'PRIMARY KEY') === 0) {
+            return self::ROW_TYPE_PRIMARY_KEY;
+        } elseif (strpos($row, 'KEY') === 0) {
+            return self::ROW_TYPE_KEY;
+        } elseif (strpos($row, 'CONSTRAINT') === 0) {
+            return self::ROW_TYPE_FOREIGN_KEY;
+        }
+        return self::ROW_TYPE_UNKNOWN;
     }
 
     /**
@@ -113,7 +145,7 @@ class CreateQueryProvider implements LoggerAwareInterface
      */
     protected function parsePrimaryKey(string $str): array
     {
-        preg_match_all('/`([a-zA-Z0-9_]*)`/m', $str, $matches, PREG_SET_ORDER, 0);
+        preg_match_all('/`([a-zA-Z0-9_-]*)`/m', $str, $matches, PREG_SET_ORDER, 0);
         $toReturn = [];
         foreach ($matches as $match) {
             $toReturn[] = $match[1];
@@ -127,7 +159,11 @@ class CreateQueryProvider implements LoggerAwareInterface
      */
     protected function parseKey(string $str): array
     {
+        preg_match_all('/`([a-zA-Z0-9_-]*)`/m', $str, $matches, PREG_SET_ORDER, 0);
         $toReturn = [];
+        foreach ($matches as $match) {
+            $toReturn[] = $match[1];
+        }
         return $toReturn;
     }
 
@@ -137,7 +173,11 @@ class CreateQueryProvider implements LoggerAwareInterface
      */
     protected function parseForeignKey(string $str): array
     {
-        $toReturn = [];
+        preg_match_all('/.*REFERENCES `([a-zA-Z0-9_-]*)` \(`([a-zA-Z0-9_-]*)`/m', $str, $matches, PREG_SET_ORDER, 0);
+        $toReturn = [
+            'table' => $matches[0][1],
+            'field' => $matches[0][2]
+        ];
         return $toReturn;
     }
 
