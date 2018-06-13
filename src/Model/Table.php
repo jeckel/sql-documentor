@@ -21,7 +21,13 @@ class Table
     /** @var string */
     protected $createQuery = '';
 
-    /** @var array  */
+    /** @var string */
+    protected $engine = '';
+
+    /** @var string */
+    protected $charset = '';
+
+    /** @var array */
     protected $columns = [];
 
     /**
@@ -30,7 +36,7 @@ class Table
      */
     public function __construct(string $tableName)
     {
-        $this->setName($tableName);
+        $this->name = $tableName;
     }
 
     /**
@@ -39,16 +45,6 @@ class Table
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Table
-     */
-    public function setName(string $name): Table
-    {
-        $this->name = $name;
-        return $this;
     }
 
     /**
@@ -88,6 +84,42 @@ class Table
     public function setShortDesc(string $shortDesc): Table
     {
         $this->shortDesc = $shortDesc;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEngine(): string
+    {
+        return $this->engine;
+    }
+
+    /**
+     * @param string $engine
+     * @return Table
+     */
+    public function setEngine(string $engine): Table
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset(): string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * @param string $charset
+     * @return Table
+     */
+    public function setCharset(string $charset): Table
+    {
+        $this->charset = $charset;
         return $this;
     }
 
