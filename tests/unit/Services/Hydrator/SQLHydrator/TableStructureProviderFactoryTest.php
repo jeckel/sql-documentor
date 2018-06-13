@@ -13,7 +13,7 @@ use SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProviderFactory;
 class TableStructureProviderFactoryTest extends \Codeception\Test\Unit
 {
 
-    public function test__invoke()
+    public function testInvoke()
     {
         $dbh = $this->createMock(\PDO::class);
 
