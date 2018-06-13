@@ -13,8 +13,7 @@ use SqlDocumentor\Services\Hydrator\YamlHydrator\TableHydrator;
  * Class YamlHydrator
  * @package SqlDocumentor\Services\Hydrator
  */
-class YamlHydrator
-    implements HydratorInterface, LoggerAwareInterface
+class YamlHydrator implements HydratorInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -37,8 +36,7 @@ class YamlHydrator
         FileParser     $fileParser,
         TableHydrator  $tableHydrator,
         ColumnHydrator $columnHydrator
-    )
-    {
+    ) {
         $this->fileParser     = $fileParser;
         $this->tableHydrator  = $tableHydrator;
         $this->columnHydrator = $columnHydrator;
@@ -54,7 +52,7 @@ class YamlHydrator
         $this->tableHydrator->hydrate($table, $yaml);
 
         if (isset($yaml['columns'])) {
-            foreach($yaml['columns'] as $colName => $yamlColumn) {
+            foreach ($yaml['columns'] as $colName => $yamlColumn) {
                 try {
                     $column = $table->getColumn($colName);
                 } catch (ColumnNotFoundException $e) {

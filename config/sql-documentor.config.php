@@ -22,7 +22,6 @@ return [
             \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProviderFactory::class,
             \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
-            \SqlDocumentor\Services\TableParser::class       => \SqlDocumentor\Factory\TableParserFactory::class,
         ],
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,

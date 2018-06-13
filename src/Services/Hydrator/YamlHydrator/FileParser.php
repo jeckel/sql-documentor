@@ -8,8 +8,7 @@ use Psr\Log\LoggerAwareTrait;
  * Class FileParser
  * @package SqlDocumentor\Services\Hydrator\YamlHydrator
  */
-class FileParser
-    implements LoggerAwareInterface
+class FileParser implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 

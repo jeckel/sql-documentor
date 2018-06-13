@@ -4,7 +4,7 @@ UID=$(shell id -u)
 GID=$(shell id -g)
 
 DOCKER_IMAGE=sql-documentor
-DOCKER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} $(DOCKER_IMAGE)
+DOCKER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} $(DOCKER_IMAGE)
 COMPOSER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
 CODECEPT_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint ./vendor/bin/codecept $(DOCKER_IMAGE)
 
@@ -25,6 +25,9 @@ codecept:
 
 test:
 	@${CODECEPT_CMD} run --steps --coverage
+
+cs:
+	${DOCKER_CMD} ./vendor/bin/phpcs --standard=PSR2 --extensions=php --ignore=./tests/_support/* ./src ./tests
 
 #run: clear
 run:

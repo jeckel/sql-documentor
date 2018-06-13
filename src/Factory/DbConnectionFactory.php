@@ -9,8 +9,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class DbConnectionFactory
  * @package SqlDocumentor\Factory
  */
-class DbConnectionFactory
-    implements FactoryInterface
+class DbConnectionFactory implements FactoryInterface
 {
     /**
      * Create an object

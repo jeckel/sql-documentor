@@ -10,8 +10,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class CreateTableParserFactory
  * @package SqlDocumentor\Factory
  */
-class CreateTableParserFactory
-    implements FactoryInterface
+class CreateTableParserFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -27,5 +26,4 @@ class CreateTableParserFactory
         $parser->setSqlParser($container->get(PHPSQLParser::class));
         return $parser;
     }
-
 }

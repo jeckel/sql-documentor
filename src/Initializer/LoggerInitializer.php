@@ -1,6 +1,6 @@
 <?php
-
 namespace SqlDocumentor\Initializer;
+
 use Interop\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\Initializer\InitializerInterface;
@@ -9,8 +9,7 @@ use Zend\ServiceManager\Initializer\InitializerInterface;
  * Class LoggerInitializer
  * @package SqlDocumentor\Initializer
  */
-class LoggerInitializer
-    implements InitializerInterface
+class LoggerInitializer implements InitializerInterface
 {
     /**
      * Initialize the given instance

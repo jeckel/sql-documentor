@@ -1,6 +1,6 @@
 <?php
-
 namespace SqlDocumentor\Model;
+
 use SqlDocumentor\Model\Exception\ColumnNotFoundException;
 
 /**

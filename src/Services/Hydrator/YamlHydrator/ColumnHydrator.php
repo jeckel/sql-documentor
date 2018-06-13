@@ -23,7 +23,7 @@ class ColumnHydrator
             $column->setComment($yaml[self::FIELD_COMMENT]);
         }
         if (isset($yaml[self::FIELD_FLAGS])) {
-            foreach($yaml[self::FIELD_FLAGS] as $flag) {
+            foreach ($yaml[self::FIELD_FLAGS] as $flag) {
                 $column->addFlag(strtoupper($flag));
             }
         }

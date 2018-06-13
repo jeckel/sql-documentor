@@ -8,8 +8,7 @@ use SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProvider;
  * Class SQLHydrator
  * @package SqlDocumentor\Services\Hydrator
  */
-class SQLHydrator
-    implements HydratorInterface
+class SQLHydrator implements HydratorInterface
 {
     /** @var CreateQueryProvider */
     protected $createQueryProvider;

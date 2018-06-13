@@ -1,6 +1,6 @@
 <?php
-
 namespace SqlDocumentor\Services\Hydrator;
+
 use Interop\Container\ContainerInterface;
 use SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator;
 use SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser;
@@ -11,8 +11,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class YamlHydratorFactory
  * @package SqlDocumentor\Services\Hydrator
  */
-class YamlHydratorFactory
-    implements FactoryInterface
+class YamlHydratorFactory implements FactoryInterface
 {
     /**
      * Create an object

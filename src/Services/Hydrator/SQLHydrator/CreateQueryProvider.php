@@ -8,8 +8,7 @@ use Psr\Log\LoggerAwareTrait;
  * Class CreatQueryProvider
  * @package SqlDocumentor\Services\Hydrator\SQLHydrator
  */
-class CreateQueryProvider
-    implements LoggerAwareInterface
+class CreateQueryProvider implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -43,9 +42,9 @@ class CreateQueryProvider
     public function parseQuery(string $query): array
     {
         $rows = explode("\n", $query);
-        $toReturn = [ 'table' => $this->parseTableMeta( $rows[count($rows) - 1])];
+        $toReturn = [ 'table' => $this->parseTableMeta($rows[count($rows) - 1])];
 
-        for($i = 1; $i < count($rows)-1; $i++) {
+        for ($i = 1; $i < count($rows)-1; $i++) {
             // cleanup string
             $row = trim($rows[$i], ' ,()');
 
@@ -93,8 +92,8 @@ class CreateQueryProvider
     {
         preg_match_all('/ ([ A-Z]+)=([A-Za-z0-9]*)/m', $meta, $matches, PREG_SET_ORDER, 0);
         $toReturn = [];
-        foreach($matches as $match) {
-            switch(strtoupper($match[1])) {
+        foreach ($matches as $match) {
+            switch (strtoupper($match[1])) {
                 case 'ENGINE':
                     $toReturn['engine'] = $match[2];
                     break;
@@ -117,7 +116,7 @@ class CreateQueryProvider
     {
         preg_match_all('/`([a-zA-Z0-9_]*)`/m', $str, $matches, PREG_SET_ORDER, 0);
         $toReturn = [];
-        foreach($matches as $match) {
+        foreach ($matches as $match) {
             $toReturn[] = $match[1];
         }
         return $toReturn;

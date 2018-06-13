@@ -8,8 +8,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class FileParserFactory
  * @package SqlDocumentor\Services\Hydrator\YamlHydrator
  */
-class FileParserFactory
-    implements FactoryInterface
+class FileParserFactory implements FactoryInterface
 {
     /**
      * Create an object

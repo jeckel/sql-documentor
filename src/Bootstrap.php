@@ -46,7 +46,7 @@ class Bootstrap
 
         $tables = [];
 
-        foreach($dbParser->listTables() as $tableName) {
+        foreach ($dbParser->listTables() as $tableName) {
             $table = $tableParser->parseTable($tableName);
 
             $output = sprintf('%s%s.md', $this->config->path->target, $table->getName());

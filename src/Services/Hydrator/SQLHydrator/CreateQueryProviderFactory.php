@@ -1,6 +1,6 @@
 <?php
-
 namespace SqlDocumentor\Services\Hydrator\SQLHydrator;
+
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -8,8 +8,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class CreateQueryProviderFactory
  * @package SqlDocumentor\Services\Hydrator\SQLHydrator
  */
-class CreateQueryProviderFactory
-    implements FactoryInterface
+class CreateQueryProviderFactory implements FactoryInterface
 {
     /**
      * Create an object

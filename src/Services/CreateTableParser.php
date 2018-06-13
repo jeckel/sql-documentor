@@ -12,8 +12,7 @@ use SqlDocumentor\Model\Table;
  * Class CreateTableParser
  * @package SqlDocumentor\Services
  */
-class CreateTableParser
-    implements LoggerAwareInterface
+class CreateTableParser implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -53,9 +52,8 @@ class CreateTableParser
             return $table;
         }
 
-        foreach($parsed['TABLE']['create-def']['sub_tree'] as $createDef)
-        {
-            switch($createDef['expr_type']) {
+        foreach ($parsed['TABLE']['create-def']['sub_tree'] as $createDef) {
+            switch ($createDef['expr_type']) {
                 case 'column-def':
                     $this->parseColumn($table, $createDef);
                     break;

@@ -6,8 +6,7 @@ namespace SqlDocumentor\Model\Exception;
  * Interface ModelExceptionInterface
  * @package SqlDocumentor\Model\Exception
  */
-interface ModelExceptionInterface
-    extends \Throwable
+interface ModelExceptionInterface extends \Throwable
 {
 
 }

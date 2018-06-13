@@ -34,7 +34,7 @@ class DbParser
     public function listTables(): array
     {
         $tables = [];
-        foreach($this->dbh->query('SHOW TABLES') as $row) {
+        foreach ($this->dbh->query('SHOW TABLES') as $row) {
             $tables[] = $row[0];
         }
         return $tables;
