@@ -22,7 +22,6 @@ return [
             \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class            => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator::class                        => \SqlDocumentor\Services\Hydrator\SQLHydratorFactory::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProviderFactory::class,
-            \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
         ],
         'invokables' => [

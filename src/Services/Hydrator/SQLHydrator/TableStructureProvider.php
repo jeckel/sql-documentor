@@ -31,6 +31,14 @@ class TableStructureProvider implements LoggerAwareInterface
     }
 
     /**
+     * @return \PDO
+     */
+    public function getDbh(): \PDO
+    {
+        return $this->dbh;
+    }
+
+    /**
      * @param string $tableName
      * @return string
      */
