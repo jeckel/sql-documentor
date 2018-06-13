@@ -17,15 +17,14 @@ return [
         'factories' => [
             'dbh'                                                                      => \SqlDocumentor\Factory\DbConnectionFactory::class,
             'logger'                                                                   => \SqlDocumentor\Factory\LoggerFactory::class,
+            \SqlDocumentor\Services\DbParser::class                                    => \SqlDocumentor\Services\DbParserFactory::class,
             \SqlDocumentor\Services\TableBuilder::class                                => \SqlDocumentor\Services\TableBuilderFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator::class                       => \SqlDocumentor\Services\Hydrator\YamlHydratorFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class            => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator::class                        => \SqlDocumentor\Services\Hydrator\SQLHydratorFactory::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProviderFactory::class,
-            \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
         ],
         'invokables' => [
-            \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,
             \SqlDocumentor\Model\ColumnFactory::class                                  => \SqlDocumentor\Model\ColumnFactory::class,
             \SqlDocumentor\Model\TableFactory::class                                   => \SqlDocumentor\Model\TableFactory::class,
             \SqlDocumentor\Services\TemplateProcessor::class => \SqlDocumentor\Services\TemplateProcessor::class,
