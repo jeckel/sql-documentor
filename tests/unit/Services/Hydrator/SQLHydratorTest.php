@@ -6,29 +6,37 @@ use SqlDocumentor\Services\Hydrator\SQLHydrator;
 
 class SQLHydratorTest extends \Codeception\Test\Unit
 {
+    const FIXTURE_PATH = __DIR__ . '/fixtures/';
+
     /**
      * @throws \ReflectionException
      */
     public function testHydrateTable()
     {
         $tableName = 'foobar';
-        $sql = "CREATE TABLE `city` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `area_code` varchar(5) NOT NULL COMMENT 'Code of ''Country'' area',
-  `city` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cities of the world'";
+        $query = file_get_contents(self::FIXTURE_PATH . 'city.sql');
+        $structure = include self::FIXTURE_PATH . 'tableStructure.php';
 
-        $createQueryProvider = $this->createMock(SQLHydrator\CreateQueryProvider::class);
+        $createQueryProvider = $this->createMock(SQLHydrator\TableStructureProvider::class);
         $createQueryProvider->expects($this->once())
             ->method('getCreateTable')
             ->with($tableName)
-            ->willReturn($sql);
+            ->willReturn($query);
+
+        $createQueryProvider->expects($this->once())
+            ->method('getStructure')
+            ->with($query)
+            ->willReturn($structure);
 
         $table = $this->createMock(Table::class);
         $table->expects($this->once())
             ->method('getName')
             ->willReturn($tableName);
+
+        $table->expects($this->once())
+            ->method('setCreateQuery')
+            ->with($query)
+            ->willReturn($table);
 
         $sqlHydrator = new SQLHydrator($createQueryProvider);
         $this->assertSame($table, $sqlHydrator->hydrateTable($table));
