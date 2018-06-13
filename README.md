@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jeckel/sql-documentor.svg?branch=master)](https://travis-ci.org/jeckel/sql-documentor)
+
 # WORK IN PROGRESS #
 
 This project is in Work In Progress status and is not stable yet. Use it with caution.
