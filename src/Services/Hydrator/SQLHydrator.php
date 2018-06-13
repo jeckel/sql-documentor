@@ -2,7 +2,7 @@
 namespace SqlDocumentor\Services\Hydrator;
 
 use SqlDocumentor\Model\Table;
-use SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProvider;
+use SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider;
 
 /**
  * Class SQLHydrator
@@ -10,16 +10,16 @@ use SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProvider;
  */
 class SQLHydrator implements HydratorInterface
 {
-    /** @var CreateQueryProvider */
-    protected $createQueryProvider;
+    /** @var TableStructureProvider */
+    protected $structureProvider;
 
     /**
      * SQLHydrator constructor.
-     * @param CreateQueryProvider $createQuery
+     * @param TableStructureProvider $createQuery
      */
-    public function __construct(CreateQueryProvider $createQuery)
+    public function __construct(TableStructureProvider $createQuery)
     {
-        $this->createQueryProvider = $createQuery;
+        $this->structureProvider = $createQuery;
     }
 
     /**
@@ -28,7 +28,26 @@ class SQLHydrator implements HydratorInterface
      */
     public function hydrateTable(Table $table): Table
     {
-        $query = $this->createQueryProvider->getCreateTable($table->getName());
+        $query = $this->structureProvider->getCreateTable($table->getName());
+        $table->setCreateQuery($query);
+
+        $structure = $this->structureProvider->getStructure($query);
+
+        $this->hydrateTableMeta($table, $structure['table']);
+
         return $table;
+    }
+
+    /**
+     * @param Table $table
+     * @param array $meta
+     * @return SQLHydrator
+     */
+    protected function hydrateTableMeta(Table $table, array $meta): self
+    {
+        $table->setEngine($meta['engine'])
+            ->setCharset($meta['charset'])
+            ->setDescription($meta['comment']);
+        return $this;
     }
 }

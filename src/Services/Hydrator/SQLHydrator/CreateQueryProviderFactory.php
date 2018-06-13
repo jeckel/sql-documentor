@@ -16,10 +16,10 @@ class CreateQueryProviderFactory implements FactoryInterface
      * @param  ContainerInterface $container
      * @param  string $requestedName
      * @param  null|array $options
-     * @return CreateQueryProvider
+     * @return TableStructureProvider
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new CreateQueryProvider($container->get('dbh'));
+        return new TableStructureProvider($container->get('dbh'));
     }
 }
