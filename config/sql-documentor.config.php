@@ -19,7 +19,7 @@ return [
             'logger'                                         => \SqlDocumentor\Factory\LoggerFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class         => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator::class                    => \SqlDocumentor\Services\Hydrator\YamlHydratorFactory::class,
-            \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProviderFactory::class,
+            \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProviderFactory::class,
             \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
         ],
