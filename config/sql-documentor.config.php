@@ -17,6 +17,7 @@ return [
         'factories' => [
             'dbh'                                                                      => \SqlDocumentor\Factory\DbConnectionFactory::class,
             'logger'                                                                   => \SqlDocumentor\Factory\LoggerFactory::class,
+            \SqlDocumentor\Services\TableBuilder::class                                => \SqlDocumentor\Services\TableBuilderFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class            => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
             \SqlDocumentor\Services\Hydrator\YamlHydrator::class                       => \SqlDocumentor\Services\Hydrator\YamlHydratorFactory::class,
             \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProviderFactory::class,
