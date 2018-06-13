@@ -1,12 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: jeckel
  * Date: 13/06/18
  * Time: 19:41
  */
 namespace SqlDocumentor\Tests\Services\Hydrator\SQLHydrator;
 
+use SqlDocumentor\Model\Column;
 use SqlDocumentor\Model\Table;
 use SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator;
 
@@ -37,10 +37,12 @@ class TableHydratorTest extends \Codeception\Test\Unit
             $table->expects($this->never())->method('setDescription');
         }
 
-        $hydrator = new TableHydrator();
-        $this->assertSame($table, $hydrator->hydrateTableMeta($table, $structure));
+        $this->assertSame($table, (new TableHydrator())->hydrateTableMeta($table, $structure));
     }
 
+    /**
+     * @return array
+     */
     public function structureProvider(): array
     {
         return [
@@ -54,6 +56,52 @@ class TableHydratorTest extends \Codeception\Test\Unit
             [ ['engine' => 'foo', 'comment' => 'baz'], true, false, true ],
             [ ['charset' => 'bar', 'comment' => 'baz'], false, true, true ],
             [ [], false, false, false ],
+        ];
+    }
+
+    /**
+     * @param array $params
+     * @param bool  $nullable
+     * @param bool  $autoIncrement
+     * @throws \ReflectionException
+     * @dataProvider hydrateColumnProvider
+     */
+    public function testHydrateColumn(array $params, bool $nullable, bool $autoIncrement)
+    {
+        $column = $this->createMock(Column::class);
+        $column->expects($this->once())
+            ->method('setType')
+            ->with($params['type'])
+            ->willReturn($column);
+        $column->expects($this->once())
+            ->method('setNullable')
+            ->with($nullable)
+            ->willReturn($column);
+
+        $column->expects($this->once())
+            ->method('setAutoIncrement')
+            ->with($autoIncrement)
+            ->willReturn($column);
+
+        if (isset($params['comment'])) {
+            $column->expects($this->once())
+                ->method('setComment')
+                ->with($params['comment'])
+                ->willReturn($column);
+        } else {
+            $column->expects($this->never())
+                ->method('setComment');
+        }
+
+        $this->assertSame($column, (new TableHydrator())->hydrateColumn($column, $params));
+    }
+
+    public function hydrateColumnProvider(): array
+    {
+        return [
+            [ ['type' => 'foo', 'null' => true, 'auto-increment' => true, 'comment' => 'foobar'], true, true ],
+            [ ['type' => 'foo', 'null' => true, 'auto-increment' => 'foobar', 'comment' => 'foobar'], true, false ],
+            [ ['type' => 'foo', 'null' => false], false, false ],
         ];
     }
 }

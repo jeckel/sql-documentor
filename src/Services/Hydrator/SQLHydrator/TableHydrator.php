@@ -1,6 +1,7 @@
 <?php
 namespace SqlDocumentor\Services\Hydrator\SQLHydrator;
 
+use SqlDocumentor\Model\Column;
 use SqlDocumentor\Model\Table;
 
 /**
@@ -11,23 +12,42 @@ class TableHydrator
 {
     /**
      * @param Table $table
-     * @param array $meta
+     * @param array $data
      * @return Table
      */
-    public function hydrateTableMeta(Table $table, array $meta): Table
+    public function hydrateTableMeta(Table $table, array $data): Table
     {
-        if (!empty($meta['engine'])) {
-            $table->setEngine($meta['engine']);
+        if (!empty($data['engine'])) {
+            $table->setEngine($data['engine']);
         }
 
-        if (!empty($meta['charset'])) {
-            $table->setCharset($meta['charset']);
+        if (!empty($data['charset'])) {
+            $table->setCharset($data['charset']);
         }
 
-        if (!empty($meta['comment'])) {
-            $table->setDescription($meta['comment']);
+        if (!empty($data['comment'])) {
+            $table->setDescription($data['comment']);
         }
 
         return $table;
+    }
+
+    /**
+     * @param Column $column
+     * @param array  $data
+     * @return Column
+     */
+    public function hydrateColumn(Column $column, array $data): Column
+    {
+        $column->setType($data['type'])
+            ->setNullable($data['null'])
+            ->setAutoIncrement(
+                isset($data['auto-increment']) && $data['auto-increment'] === true
+            );
+
+        if (!empty($data['comment'])) {
+            $column->setComment($data['comment']);
+        }
+        return $column;
     }
 }

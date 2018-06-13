@@ -15,19 +15,21 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'dbh'                                            => \SqlDocumentor\Factory\DbConnectionFactory::class,
-            'logger'                                         => \SqlDocumentor\Factory\LoggerFactory::class,
-            \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class         => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
-            \SqlDocumentor\Services\Hydrator\YamlHydrator::class                    => \SqlDocumentor\Services\Hydrator\YamlHydratorFactory::class,
-            \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\CreateQueryProviderFactory::class,
+            'dbh'                                                                      => \SqlDocumentor\Factory\DbConnectionFactory::class,
+            'logger'                                                                   => \SqlDocumentor\Factory\LoggerFactory::class,
+            \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParser::class            => \SqlDocumentor\Services\Hydrator\YamlHydrator\FileParserFactory::class,
+            \SqlDocumentor\Services\Hydrator\YamlHydrator::class                       => \SqlDocumentor\Services\Hydrator\YamlHydratorFactory::class,
+            \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider::class => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProviderFactory::class,
             \SqlDocumentor\Services\CreateTableParser::class => \SqlDocumentor\Factory\CreateTableParserFactory::class,
             \SqlDocumentor\Services\DbParser::class          => \SqlDocumentor\Factory\DbParserFactory::class,
         ],
         'invokables' => [
             \PHPSQLParser\PHPSQLParser::class                => \PHPSQLParser\PHPSQLParser::class,
+            \SqlDocumentor\Model\ColumnFactory::class                                  => \SqlDocumentor\Model\ColumnFactory::class,
             \SqlDocumentor\Services\TemplateProcessor::class => \SqlDocumentor\Services\TemplateProcessor::class,
-            \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class     => \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class,
-            \SqlDocumentor\Services\Hydrator\YamlHydrator\TableHydrator::class      => \SqlDocumentor\Services\Hydrator\YamlHydrator\TableHydrator::class
+            \SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator::class          => \SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator::class,
+            \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class        => \SqlDocumentor\Services\Hydrator\YamlHydrator\ColumnHydrator::class,
+            \SqlDocumentor\Services\Hydrator\YamlHydrator\TableHydrator::class         => \SqlDocumentor\Services\Hydrator\YamlHydrator\TableHydrator::class
         ],
         'initializers' => [
             \SqlDocumentor\Initializer\LoggerInitializer::class,

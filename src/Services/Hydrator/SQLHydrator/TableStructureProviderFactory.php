@@ -8,7 +8,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class CreateQueryProviderFactory
  * @package SqlDocumentor\Services\Hydrator\SQLHydrator
  */
-class CreateQueryProviderFactory implements FactoryInterface
+class TableStructureProviderFactory implements FactoryInterface
 {
     /**
      * Create an object

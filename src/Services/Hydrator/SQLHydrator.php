@@ -1,7 +1,9 @@
 <?php
 namespace SqlDocumentor\Services\Hydrator;
 
+use SqlDocumentor\Model\ColumnFactory;
 use SqlDocumentor\Model\Table;
+use SqlDocumentor\Services\Hydrator\SQLHydrator\TableHydrator;
 use SqlDocumentor\Services\Hydrator\SQLHydrator\TableStructureProvider;
 
 /**
@@ -13,13 +15,26 @@ class SQLHydrator implements HydratorInterface
     /** @var TableStructureProvider */
     protected $structureProvider;
 
+    /** @var TableHydrator */
+    protected $tableHydrator;
+
+    /** @var ColumnFactory */
+    protected $columnFactory;
+
     /**
      * SQLHydrator constructor.
      * @param TableStructureProvider $createQuery
+     * @param TableHydrator          $tableHydrator
+     * @param ColumnFactory          $columnFactory
      */
-    public function __construct(TableStructureProvider $createQuery)
-    {
+    public function __construct(
+        TableStructureProvider $createQuery,
+        TableHydrator $tableHydrator,
+        ColumnFactory $columnFactory
+    ) {
         $this->structureProvider = $createQuery;
+        $this->tableHydrator = $tableHydrator;
+        $this->columnFactory = $columnFactory;
     }
 
     /**
@@ -32,6 +47,14 @@ class SQLHydrator implements HydratorInterface
         $table->setCreateQuery($query);
 
         $structure = $this->structureProvider->getStructure($query);
+
+        $this->tableHydrator->hydrateTableMeta($table, $structure['table']);
+        foreach ($structure['columns'] as $name => $params) {
+            $this->tableHydrator->hydrateColumn(
+                $this->columnFactory->factory($table, $name),
+                $params
+            );
+        }
 
         $this->hydrateTableMeta($table, $structure['table']);
 
