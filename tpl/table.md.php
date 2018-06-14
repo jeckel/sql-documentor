@@ -22,4 +22,5 @@ foreach($table->getColumns() as $column) {
 
 ```sql
 <?=$table->getCreateQuery()?>
+
 ```
