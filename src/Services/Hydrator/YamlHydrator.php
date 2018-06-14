@@ -43,6 +43,30 @@ class YamlHydrator implements HydratorInterface, LoggerAwareInterface
     }
 
     /**
+     * @return FileParser
+     */
+    public function getFileParser(): FileParser
+    {
+        return $this->fileParser;
+    }
+
+    /**
+     * @return TableHydrator
+     */
+    public function getTableHydrator(): TableHydrator
+    {
+        return $this->tableHydrator;
+    }
+
+    /**
+     * @return ColumnHydrator
+     */
+    public function getColumnHydrator(): ColumnHydrator
+    {
+        return $this->columnHydrator;
+    }
+
+    /**
      * @param Table $table
      * @return Table
      */
