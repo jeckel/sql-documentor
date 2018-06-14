@@ -25,6 +25,22 @@ class DbParser
     }
 
     /**
+     * @return \PDO
+     */
+    public function getDbh(): \PDO
+    {
+        return $this->dbh;
+    }
+
+    /**
+     * @return TableBuilder
+     */
+    public function getTableBuilder(): TableBuilder
+    {
+        return $this->tableBuilder;
+    }
+
+    /**
      * @return array
      */
     public function parseDb()
