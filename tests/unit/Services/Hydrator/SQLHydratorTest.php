@@ -46,26 +46,29 @@ class SQLHydratorTest extends \Codeception\Test\Unit
         $column2 = $this->createMock(Column::class);
         $column3 = $this->createMock(Column::class);
         $column4 = $this->createMock(Column::class);
+        $column5 = $this->createMock(Column::class);
 
         $columnFactory = $this->createMock(ColumnFactory::class);
-        $columnFactory->expects($this->exactly(4))
+        $columnFactory->expects($this->exactly(5))
             ->method('factory')
             ->withConsecutive(
                 [$table, 'id'],
                 [$table, 'id_user'],
                 [$table, 'area_code'],
-                [$table, 'city']
+                [$table, 'city'],
+                [$table, 'description']
             )
-            ->willReturnOnConsecutiveCalls($column1, $column2, $column3, $column4);
+            ->willReturnOnConsecutiveCalls($column1, $column2, $column3, $column4, $column5);
 
-        $tableHydrator->expects($this->exactly(4))
+        $tableHydrator->expects($this->exactly(5))
             ->method('hydrateColumn')
             ->withConsecutive(
                 [$column1, $structure['columns']['id']],
                 [$column2, $structure['columns']['id_user']],
                 [$column3, $structure['columns']['area_code']],
-                [$column4, $structure['columns']['city']]
-            )->willReturnOnConsecutiveCalls($column1, $column2, $column3, $column4);
+                [$column4, $structure['columns']['city']],
+                [$column5, $structure['columns']['description']]
+            )->willReturnOnConsecutiveCalls($column1, $column2, $column3, $column4, $column5);
 
         $sqlHydrator = new SQLHydrator($createQueryProvider, $tableHydrator, $columnFactory);
         $this->assertSame($table, $sqlHydrator->hydrateTable($table));

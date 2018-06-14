@@ -30,7 +30,12 @@ return [
         'city' => [
             'type' => 'varchar(64)',
             'null' => false
-        ]
+        ],
+        'description' =>[
+            'type' => 'text',
+            'null' => true,
+            'comment' => 'Description'
+        ],
     ],
     'primary-key' => [
         'id'

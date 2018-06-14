@@ -111,11 +111,18 @@ class TableStructureProvider implements LoggerAwareInterface
      */
     protected function parseColumnMeta(string $meta): array
     {
-        $toReturn = [];
-        $toReturn['type'] = substr($meta, 0, strpos($meta, ' '));
-        $meta = substr($meta, strpos($meta, ' ') + 1);
-        $toReturn['null'] = (strpos($meta, 'NULL') === 0);
-        $meta = substr($meta, strpos($meta, 'NULL') + 5);
+        $toReturn = [
+            'type' => substr($meta, 0, strpos($meta, ' ')?:strlen($meta))
+        ];
+        $meta = trim(substr($meta, strlen($toReturn['type'])));
+        $toReturn['null'] = !(strpos($meta, 'NOT NULL') === 0);
+
+//        $toReturn['type'] = substr($meta, 0, strpos($meta, ' ')?:strlen($meta));
+//        $meta = substr($meta, strpos($meta, ' ') + 1);
+//        $toReturn['null'] = (strpos($meta, 'NOT NULL') === 1);
+        if (strpos($meta, 'NULL')) {
+            $meta = substr($meta, strpos($meta, 'NULL') + 5);
+        }
         if (strpos($meta, 'AUTO_INCREMENT') !== false) {
             $toReturn['auto-increment'] = true;
         }
