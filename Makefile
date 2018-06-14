@@ -28,7 +28,7 @@ codecept:
 	@${CODECEPT_CMD} ${CMD}
 
 test:
-	@${CODECEPT_CMD} run --steps --coverage
+	@${CODECEPT_CMD} run --steps --coverage --coverage-html
 
 cs:
 	${DOCKER_CMD} ./vendor/bin/phpcs --standard=PSR2 --extensions=php --ignore=./tests/_support/* ./src ./tests
