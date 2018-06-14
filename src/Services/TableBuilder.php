@@ -35,6 +35,30 @@ class TableBuilder
     }
 
     /**
+     * @return YamlHydrator
+     */
+    public function getYamlHydrator(): YamlHydrator
+    {
+        return $this->yamlHydrator;
+    }
+
+    /**
+     * @return SQLHydrator
+     */
+    public function getSqlHydrator(): SQLHydrator
+    {
+        return $this->sqlHydrator;
+    }
+
+    /**
+     * @return TableFactory
+     */
+    public function getTableFactory(): TableFactory
+    {
+        return $this->tableFactory;
+    }
+
+    /**
      * @param string $tableName
      * @return Table
      */
