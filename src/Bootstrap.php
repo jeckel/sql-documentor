@@ -1,9 +1,7 @@
 <?php
 namespace SqlDocumentor;
 
-use SqlDocumentor\Services\DbParser;
-use SqlDocumentor\Services\TableParser;
-use SqlDocumentor\Services\TemplateProcessor;
+use SqlDocumentor\Services\SqlDocumentor;
 use Zend\Config\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -35,35 +33,6 @@ class Bootstrap
      */
     public function __invoke()
     {
-        /** @var DbParser $dbParser */
-        $dbParser = $this->serviceManager->get(DbParser::class);
-
-        /** @var TableParser $tableParser */
-        $tableParser = $this->serviceManager->get(TableParser::class);
-
-        /** @var TemplateProcessor $templateProcessor */
-        $templateProcessor = $this->serviceManager->get(TemplateProcessor::class);
-
-        $tables = [];
-
-        foreach ($dbParser->listTables() as $tableName) {
-            $table = $tableParser->parseTable($tableName);
-
-            $output = sprintf('%s%s.md', $this->config->path->target, $table->getName());
-
-            $templateProcessor->processToFile(
-                $this->config->path->templates . 'table.md.php',
-                $output,
-                ['table' => $table]
-            );
-
-            $tables[$table->getName()] = $table;
-        }
-
-        $templateProcessor->processToFile(
-            $this->config->path->templates . 'index.md.php',
-            $this->config->path->target . 'index.md',
-            ['tables' => $tables]
-        );
+        $this->serviceManager->get(SqlDocumentor::class)->generate();
     }
 }
