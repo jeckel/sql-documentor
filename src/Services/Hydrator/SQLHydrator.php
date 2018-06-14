@@ -38,6 +38,30 @@ class SQLHydrator implements HydratorInterface
     }
 
     /**
+     * @return TableStructureProvider
+     */
+    public function getStructureProvider(): TableStructureProvider
+    {
+        return $this->structureProvider;
+    }
+
+    /**
+     * @return TableHydrator
+     */
+    public function getTableHydrator(): TableHydrator
+    {
+        return $this->tableHydrator;
+    }
+
+    /**
+     * @return ColumnFactory
+     */
+    public function getColumnFactory(): ColumnFactory
+    {
+        return $this->columnFactory;
+    }
+
+    /**
      * @param Table $table
      * @return Table
      */
