@@ -8,18 +8,18 @@ namespace SqlDocumentor\Model;
  */
 class ColumnFactory
 {
-    /** @var array */
-    protected $instances = [];
-
     /**
-     * @param string $columnName
+     * @param Table  $table
+     * @param string $name
      * @return Column
      */
-    public function factory(string $columnName)
+    public function factory(Table $table, string $name): Column
     {
-        if (! isset($this->instances[$columnName])) {
-            $this->instances[$columnName] = new Column($columnName);
+        if ($table->hasColumn($name)) {
+            return $table->getColumn($name);
         }
-        return $this->instances[$columnName];
+        $column = new Column($name);
+        $table->addColumn($column);
+        return $column;
     }
 }

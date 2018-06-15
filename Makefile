@@ -4,8 +4,13 @@ UID=$(shell id -u)
 GID=$(shell id -g)
 
 DOCKER_IMAGE=sql-documentor
-DOCKER_CMD=docker run --rm -v `pwd`:/project -u ${UID}:${GID} $(DOCKER_IMAGE)
+DOCKER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} $(DOCKER_IMAGE)
 COMPOSER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
+CODECEPT_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint ./vendor/bin/codecept $(DOCKER_IMAGE)
+
+hook-install:
+	@if [ -f .git/hooks/pre-commit -o -L .git/hooks/pre-commit ]; then rm .git/hooks/pre-commit; fi
+	@cd .git/hooks/ && ln -s ../../hooks/precommit.sh pre-commit
 
 build:
 	@docker build -t ${DOCKER_IMAGE} .
@@ -18,6 +23,18 @@ composer-install:
 
 composer-update:
 	@${COMPOSER_CMD} update
+
+codecept:
+	@${CODECEPT_CMD} ${CMD}
+
+test:
+	@${CODECEPT_CMD} run --steps --coverage --coverage-html
+
+cs:
+	${DOCKER_CMD} ./vendor/bin/phpcs --standard=PSR2 --extensions=php --ignore=./tests/_support/* ./src ./tests
+
+md:
+	${DOCKER_CMD} ./vendor/bin/phpmd ./src text cleancode
 
 #run: clear
 run:
@@ -32,24 +49,6 @@ down:
 
 clear:
 	@rm -f docs/*.md
-
-#Options:
-#  -c, --configuration=CONFIGURATION  Configuration file
-#      --value=VALUE                  Set different configuration values (multiple values allowed)
-#  -s, --source=SOURCE                Where to take the documentation from
-#  -p, --processor=PROCESSOR          Manipulations on the tree
-#  -t, --themes=THEMES                Set a different themes directory
-#  -f, --format=FORMAT                Output format, html or confluence [default: "html"]
-#      --delete                       Delete pages not linked to a documentation page (confluence)
-#  -d, --destination=DESTINATION      Destination folder, relative to the working directory [default: "static"]
-#      --search                       Generate full text search
-#  -h, --help                         Display this help message
-#  -q, --quiet                        Do not output any message
-#  -V, --version                      Display this application version
-#      --ansi                         Force ANSI output
-#      --no-ansi                      Disable ANSI output
-#  -n, --no-interaction               Do not ask any interactive question
-#  -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 daux:
 	docker run --rm -it -w /build -v $(shell pwd):/build -u ${UID}:${GID} daux/daux.io daux

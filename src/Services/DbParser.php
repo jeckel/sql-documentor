@@ -10,6 +10,20 @@ class DbParser
     /** @var \PDO */
     protected $dbh;
 
+    /** @var TableBuilder */
+    protected $tableBuilder;
+
+    /**
+     * DbParser constructor.
+     * @param \PDO         $dbh
+     * @param TableBuilder $tableBuilder
+     */
+    public function __construct(\PDO $dbh, TableBuilder $tableBuilder)
+    {
+        $this->dbh = $dbh;
+        $this->tableBuilder = $tableBuilder;
+    }
+
     /**
      * @return \PDO
      */
@@ -19,35 +33,23 @@ class DbParser
     }
 
     /**
-     * @param \PDO $dbh
-     * @return DbParser
+     * @return TableBuilder
      */
-    public function setDbh(\PDO $dbh): DbParser
+    public function getTableBuilder(): TableBuilder
     {
-        $this->dbh = $dbh;
-        return $this;
+        return $this->tableBuilder;
     }
 
     /**
      * @return array
      */
-    public function listTables(): array
+    public function parseDb()
     {
         $tables = [];
-        foreach($this->dbh->query('SHOW TABLES') as $row) {
-            $tables[] = $row[0];
+        foreach ($this->dbh->query('SHOW TABLES') as $row) {
+            $table = $this->tableBuilder->build($row[0]);
+            $tables[$table->getName()] = $table;
         }
         return $tables;
-    }
-
-    /**
-     * @param string $tableName
-     * @return string
-     */
-    public function getCreateTable(string $tableName): string
-    {
-        return $this->dbh->query(
-            sprintf('SHOW CREATE TABLE `%s`', $tableName)
-        )->fetchColumn(1);
     }
 }

@@ -7,18 +7,26 @@ namespace SqlDocumentor\Model;
  */
 class TableFactory
 {
-    /** @var array */
-    protected $instances = [];
+    /** @var array  */
+    static protected $instances = [];
 
     /**
-     * @param string $tableName
+     * @param string $name
      * @return Table
      */
-    public function factory(string $tableName)
+    public function factory(string $name): Table
     {
-        if (! isset($this->instances[$tableName])) {
-            $this->instances[$tableName] = new Table($tableName);
+        if (! isset(self::$instances[$name])) {
+            self::$instances[$name] = new Table($name);
         }
-        return $this->instances[$tableName];
+        return self::$instances[$name];
+    }
+
+    /**
+     * @internal
+     */
+    public static function reset(): void
+    {
+        self::$instances = [];
     }
 }
