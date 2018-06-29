@@ -35,6 +35,11 @@ class FileParser implements LoggerAwareInterface
             $this->logger && $this->logger->warning("No readable YML file for table '{$tableName}'");
             return [];
         }
-        return yaml_parse_file($filePath);
+        $yml = yaml_parse_file($filePath);
+        if (false === $yml) {
+            $this->logger && $this->logger->warning("Error parsing file '{$filePath}'");
+            return [];
+        }
+        return $yml;
     }
 }

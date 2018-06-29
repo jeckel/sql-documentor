@@ -3,7 +3,7 @@
 UID=$(shell id -u)
 GID=$(shell id -g)
 
-DOCKER_IMAGE=sql-documentor
+DOCKER_IMAGE=jeckel/sql-documentor:latest
 DOCKER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} $(DOCKER_IMAGE)
 COMPOSER_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint composer $(DOCKER_IMAGE)
 CODECEPT_CMD=docker run --rm -v `pwd`:/project -w /project -u ${UID}:${GID} --entrypoint ./vendor/bin/codecept $(DOCKER_IMAGE)
